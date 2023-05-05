@@ -1,9 +1,12 @@
+import {take} from 'ramda'
+
 import * as blessed from "blessed";
 import {
     grid as Grid, map as Map,
     log as Log
 
 } from "blessed-contrib";
+import { shuffler } from "./shuffler";
 
 const screen = blessed.screen()
 
@@ -22,8 +25,10 @@ screen.key(
     () => process.exit(0)
 );
 
+const SKILLS = ["Admin", "Animals", "Art", "Athletics", "Carouse", "Drive", "Electronics", "Science", "Flyer", "Seafarer", "Language", "Streetwise", "Mechanic", "Survival", "Medic", "Vacc Suit", "Profession"] as const
+type Skill = typeof SKILLS[number];
 
-type Skill = "Admin"| "Animals"| "Art"| "Athletics"| "Carouse"| "Drive"| "Electronics"| "Science"| "Flyer"| "Seafarer"| "Language"| "Streetwise"| "Mechanic"| "Survival"| "Medic"| "Vacc Suit"| "Profession"
+const shuffle = shuffler(Math.random);
 
 
 interface Character {
@@ -33,13 +38,17 @@ interface Character {
 
 const generate = (): Character => ({
         upp: UPP().join(""),
-        skills: {
-            
-        }
+        skills: take(3, shuffle(SKILLS)) .reduce(
+            (acc, skill) => Object.assign( acc, {[skill]: 0}
+        ), {})
 })
 
 
-setInterval(() => log.log(generate().upp), 1000);
+setInterval(() => {
+    const char = generate();
+    log.log(char.upp)
+    log.log("  " + JSON.stringify(char.skills))
+}, 1000);
 
 const UPP = (): string[] => {
     return [char(),char(),char(),char(),char(),char()]
