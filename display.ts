@@ -1,19 +1,40 @@
 import * as blessed from "blessed";
-import * as contrib from "blessed-contrib";
+import {
+    grid as Grid, map as Map,
+    log as Log
+
+} from "blessed-contrib";
 
 const screen = blessed.screen()
-const line = contrib.line({ style:
-           { line: "yellow"
-           , text: "green"
-           , baseline: "black"}
-         , xLabelPadding: 3
-         , xPadding: 5
-         , label: 'Line Example'})
-     
-screen.append(line)
-line.setData({
-    x: ['t1', 't2', 't3', 't4'],
-    y: [5, 1, 7, 5]
- })
 
-screen.render();
+const grid = new Grid({
+    rows: 12, cols: 12, screen: screen
+})
+
+const Characteristics = grid.set(0, 0, 4, 4, Log, {
+    label: 'Characteristcs'
+})
+
+screen.render()
+
+screen.key(
+    ['escape', 'q', 'C-c'], 
+    () => process.exit(0)
+);
+
+
+screen.key(
+    ['n'], 
+    () => Characteristics.log(
+        UPP().join("")
+    )
+);
+
+const UPP = (): number[] => {
+    return [char(),char(),char(),char(),char(),char()]
+}
+
+const char = (): string => (roll()+roll()).toString(16).toUpperCase()
+const roll = ():number => Math.ceil(Math.random() * 6);
+
+
