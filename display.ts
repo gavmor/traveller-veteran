@@ -11,8 +11,8 @@ const grid = new Grid({
     rows: 12, cols: 12, screen: screen
 })
 
-const Characteristics = grid.set(0, 0, 4, 4, Log, {
-    label: 'Characteristcs'
+const log = grid.set(0, 0, 4, 4, Log, {
+    label: 'UPP'
 })
 
 screen.render()
@@ -23,14 +23,25 @@ screen.key(
 );
 
 
-screen.key(
-    ['n'], 
-    () => Characteristics.log(
-        UPP().join("")
-    )
-);
+type Skill = "Admin"| "Animals"| "Art"| "Athletics"| "Carouse"| "Drive"| "Electronics"| "Science"| "Flyer"| "Seafarer"| "Language"| "Streetwise"| "Mechanic"| "Survival"| "Medic"| "Vacc Suit"| "Profession"
 
-const UPP = (): number[] => {
+
+interface Character {
+    upp: string
+    skills: Partial<Record<Skill, number>>
+};
+
+const generate = (): Character => ({
+        upp: UPP().join(""),
+        skills: {
+            
+        }
+})
+
+
+setInterval(() => log.log(generate().upp), 1000);
+
+const UPP = (): string[] => {
     return [char(),char(),char(),char(),char(),char()]
 }
 
