@@ -5,7 +5,7 @@ import {
     log as Log
 
 } from "blessed-contrib";
-import { generate } from './generate';
+import { generate } from './src/generate';
 
 const screen = blessed.screen()
 
@@ -24,8 +24,8 @@ screen.key(
     () => process.exit(0)
 );
 
-setInterval(() => {
-    const char = generate();
-    log.log(char.upp)
-    log.log("  " + JSON.stringify(char.skills))
-}, 1000);
+// setInterval(() => {
+//     const char = generate();
+//     log.log(char.upp)
+//     log.log("  " + JSON.stringify(char.skills))
+// }, 1000);

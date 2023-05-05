@@ -1,5 +1,5 @@
 import { take } from 'ramda';
-import { shuffler } from "./shuffler";
+import { shuffler } from "./lib/shuffler";
 
 const SKILLS = ["Admin", "Animals", "Art", "Athletics", "Carouse", "Drive", "Electronics", "Science", "Flyer", "Seafarer", "Language", "Streetwise", "Mechanic", "Survival", "Medic", "Vacc Suit", "Profession"] as const;
 type Skill = (typeof SKILLS)[number];
