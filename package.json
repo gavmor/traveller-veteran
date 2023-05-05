@@ -8,13 +8,16 @@
   "dependencies": {
     "@types/blessed": "^0.1.21",
     "@types/node": "^20.0.0",
+    "@types/ramda": "^0.29.1",
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.11.0",
+    "onchange": "^7.1.0",
     "ramda": "^0.29.0",
-    "tsx": "^3.12.7"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
   },
   "scripts": {
-    "start": "tsx display.ts",
-    "watch": "tsx --watch display.ts"
+    "start": "ts-node --logError .",
+    "watch": "onchange -i -k '**/*.ts*' -- yarn start"
   }
 }
