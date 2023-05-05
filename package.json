@@ -1,0 +1,19 @@
+{
+  "name": "veteran-traveller",
+  "version": "0.0.1",
+  "description": "A program which generates Traveller RPG characters iteratively, preserving the eldest surviving character.",
+  "main": "display.ts",
+  "author": "Gavin Morgan",
+  "license": "MIT",
+  "dependencies": {
+    "@types/blessed": "^0.1.21",
+    "@types/node": "^20.0.0",
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.11.0",
+    "tsx": "^3.12.7"
+  },
+  "scripts": {
+    "start": "tsx display.ts",
+    "watch": "tsx --watch display.ts"
+  }
+}
