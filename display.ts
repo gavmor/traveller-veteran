@@ -3,8 +3,7 @@ import * as blessed from "blessed";
 import {
     grid as Grid, map as Map,
     log as Log
-
-} from "blessed-contrib";
+} from "blessed-contrib"; // @ts-ignore
 import { generate } from './src/generate';
 
 const screen = blessed.screen()
@@ -26,6 +25,6 @@ screen.key(
 
 setInterval(() => {
     const char = generate();
-    log.log(char.upp)
+    log.log(char.upp.join("").toUpperCase());
     log.log("  " + JSON.stringify(char.skills))
 }, 1000);

@@ -14,3 +14,6 @@ function protoShuffler<Member>(random: () => number, list: Member[]) {
 };
 
 export const shuffler = curry(protoShuffler);
+
+const shuffle = shuffler(Math.random);
+
