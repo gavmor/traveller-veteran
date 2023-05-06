@@ -6,6 +6,7 @@
   "author": "Gavin Morgan",
   "license": "MIT",
   "dependencies": {
+    "@benchristel/taste": "^0.4.0",
     "@types/blessed": "^0.1.21",
     "@types/node": "^20.0.0",
     "@types/ramda": "^0.29.1",

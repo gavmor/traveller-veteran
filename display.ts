@@ -4,12 +4,12 @@ import {
     grid as Grid, map as Map,
     log as Log
 } from "blessed-contrib"; // @ts-ignore
-import { generate } from './src/generate';
+import { generate } from './src/character';
 
 const screen = blessed.screen()
 
 const grid = new Grid({
-    rows: 12, cols: 12, screen: screen
+    rows: 4, cols: 4, screen: screen
 })
 
 const log = grid.set(0, 0, 4, 4, Log, {
