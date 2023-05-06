@@ -1,8 +1,6 @@
 import { take, times } from 'ramda';
 import { shuffler } from "./lib/shuffler";
 
-import { describe, expect, is } from "@benchristel/taste"
-
 const AcademicSkills = ["Admin", "Advocate", "Animals",  "Animals.Training", "Animals.Veterinary", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"]
 
 const BackgroundSkills = ["Admin", "Animals", "Art", "Athletics", "Carouse", "Drive", "Electronics", "Science", "Flyer", "Seafarer", "Language", "Streetwise", "Mechanic", "Survival", "Medic", "Vacc Suit", "Profession"];
@@ -96,8 +94,3 @@ const newCharacter = (): Character => ({
 function EDU(char: Character) {
     return parseInt(char.upp[4], 16);
 }
-// describe("withBackgroundSkills", {
-//     "it works"() {
-//         expect(withBackgroundSkills(createCharacter()), is, {})
-//     }
-// })
