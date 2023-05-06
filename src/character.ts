@@ -3,8 +3,14 @@ import { shuffler } from "./lib/shuffler";
 
 import { describe, expect, is } from "@benchristel/taste"
 
-const SKILLS = ["Admin", "Animals", "Art", "Athletics", "Carouse", "Drive", "Electronics", "Science", "Flyer", "Seafarer", "Language", "Streetwise", "Mechanic", "Survival", "Medic", "Vacc Suit", "Profession"] as const;
-type Skill = (typeof SKILLS)[number];
+const AcademicSkills = ["Admin", "Advocate", "Animals",  "Animals.Training", "Animals.Veterinary", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"]
+
+const BackgroundSkills = ["Admin", "Animals", "Art", "Athletics", "Carouse", "Drive", "Electronics", "Science", "Flyer", "Seafarer", "Language", "Streetwise", "Mechanic", "Survival", "Medic", "Vacc Suit", "Profession"];
+const AllSkills = [...new Set([
+    ...BackgroundSkills,
+    ...AcademicSkills
+])];
+type Skill = (typeof AllSkills)[number];
 type Skillset = Partial<Record<Skill, number>>;
 const shuffle = shuffler(Math.random);
 
@@ -22,9 +28,21 @@ function withEducation(char: Character): Character {
     }
 }
 
+const roll = (mod: number): number => d6()+d6()+mod;
 function withUniversity(char: Character): Character {
+    return roll(EDU(char)) >= 7 
+        ? withAdmission(withUniversity(char))
+        : char;
+}
+
+function withAdmission(char: Character): Character {
     return {
-      ...char
+      ...char,
+        skills: {
+            ...char.skills, // clobbers extant skills
+            [pickSkills(1,AcademicSkills)[0]]: 0,
+            [pickSkills(1,AcademicSkills)[0]]: 1, // clobbers
+        }
     }
 }
 
@@ -49,11 +67,16 @@ export function wBgndSkills(char: Character): Character {
     return Object.assign(
         char,
         { 
-        // @ts-ignore
-        skills: take(DM(EDU(char))+3, shuffle(SKILLS)).reduce(assignAtZero, {}) 
+            skills: pickSkills(
+                DM(EDU(char)) + 3,
+                BackgroundSkills
+            ).reduce(assignAtZero, {}) 
         }
     );
 }
+
+const pickSkills = (n: number, skills: Skill[]): Skill[] => 
+    take(n, shuffle(skills));
 
 function DM(score: number): number {
     if (score > 14) return 3
