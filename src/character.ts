@@ -27,9 +27,10 @@ function withEducation(char: Character): Character {
 }
 
 const roll = (mod: number): number => d6()+d6()+mod;
+
 function withUniversity(char: Character): Character {
     return roll(EDU(char)) >= 7 
-        ? withAdmission(withUniversity(char))
+        ? withAdmission(char)
         : char;
 }
 
