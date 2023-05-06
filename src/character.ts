@@ -14,22 +14,43 @@ interface Character {
     skills: Skillset;
 }
 
+function withEducation(char: Character): Character {
+    switch (d6() % 3) {
+        case 1: return withUniversity(char)
+        case 2: return withMilitaryAcademy(char)
+        default: return char;
+    }
+}
+
+function withUniversity(char: Character): Character {
+    return {
+      ...char
+    }
+}
+
+function withMilitaryAcademy(char: Character): Character {
+    return {
+      ...char
+    }
+}
+
+
 export const generate = (): Character => 
-    wBgndSkills(newCharacter());
+    withEducation(wBgndSkills(newCharacter()));
 
 const assignAtZero = (acc: Skillset, skill: Skill): {} => 
     Object.assign(acc, { [skill]: 0 });
 const UPP = (): Hex[] => times(rollCharacteristics, 6)
-const rollCharacteristics = (): Hex => (roll() + roll())
+const rollCharacteristics = (): Hex => (d6() + d6())
     .toString(16) as Hex;
-const roll = (): number => Math.ceil(Math.random() * 6);
+const d6 = (): number => Math.ceil(Math.random() * 6);
 
 export function wBgndSkills(char: Character): Character {
     return Object.assign(
         char,
         { 
-        skills: take(DM(EDU(char))+3, SKILLS)
-            .reduce(assignAtZero, {}) 
+        // @ts-ignore
+        skills: take(DM(EDU(char))+3, shuffle(SKILLS)).reduce(assignAtZero, {}) 
         }
     );
 }
