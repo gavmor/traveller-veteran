@@ -15,13 +15,13 @@
     "blessed-contrib": "^4.11.0",
     "onchange": "^7.1.0",
     "ramda": "^0.29.0",
-    "ts-node": "^10.9.1",
+    "tsx": "^3.12.7",
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "start": "ts-node --logError display.ts",
+    "start": "tsx display.ts",
     "test": "bun test.ts",
-    "watch": "onchange -i -k '**/*.ts*' -- yarn start",
-    "test-watch": "onchange -i -k '**/*.ts*' -- yarn test"
+    "watch": "onchange -i --kill '**/*.ts*' -- yarn start",
+    "test-watch": "onchange -i --kill '**/*.ts*' -- yarn test"
   }
 }
