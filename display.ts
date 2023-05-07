@@ -4,7 +4,7 @@ import {
     grid as Grid, map as Map,
     log as Log
 } from "blessed-contrib"; 
-import { generate } from './src/character.js';
+import { generate } from './src/Lifepath.js';
 
 const screen = blessed.screen()
 

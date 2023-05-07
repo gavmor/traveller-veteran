@@ -1,4 +1,4 @@
-import { Character } from './character.js';
+import { Character } from './Character.js';
 
 export const EDU = (char: Character) => parseInt(char.upp[4], 16);
 
@@ -12,4 +12,6 @@ export function DM(score: number): number {
     return -3; 
 }
 export const d6 = (): number => Math.ceil(Math.random() * 6);
+
+export const roll = (mod: number): number => d6()+d6()+mod;
 
