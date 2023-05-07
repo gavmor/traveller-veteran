@@ -1,5 +1,6 @@
 import { Character } from './Character.js';
 
+export const INT = (char: Character) => parseInt(char.upp[3], 16);
 export const EDU = (char: Character) => parseInt(char.upp[4], 16);
 export const SOC = (char: Character) => parseInt(char.upp[5], 16);
 

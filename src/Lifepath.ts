@@ -1,9 +1,9 @@
-import { roll, SOC } from "./Game.js";
+import { INT, roll, SOC } from "./Game.js";
 import * as ramda from 'ramda';
 import { d6, DM, EDU } from './Game.js';
 import { Character, AcademicSkills, Skillset, Skill, BackgroundSkills as BACKGROUND_SKILLS, shuffle, newUPP, AllSkills } from './Character.js';
 import { newCharacter } from "./Character.js";
-import { curry, equals, expect, not, test } from "@benchristel/taste";
+import { curry, equals, expect, is, not, test } from "@benchristel/taste";
 import { d66 } from "./Game.js";
 import { d66Table } from "./Game.js";
 
@@ -19,39 +19,34 @@ function withEducation(char: Character): Character {
 
 function withUniversity(char: Character): Character {
     return roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7 
-        ? withAdmission(char)
+        ? matriculate(char)
         : char;
 }
 
-function withAdmission(char: Character): Character {
+function matriculate(char: Character): Character {
   const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills))
   
-  return withGraduation({major,minor},withEducationEvent[d66()](withMatriculation({major, minor}, char)))
+  return attemptGraduation({major,minor},withEducationEvent[d66()](declare({major, minor}, char)))
 }
 
-function withGraduation({minor, major}: EducationTerm, char: Character): Character {
-  return {
-    ...char,
-    skills: {
-      ...char.skills,
-      [minor]: 1,
-      [major]: 2, 
-    },
-    log: [
-      ...char.log,
-      `Graduated with a degree in ${major} and a minor in ${minor}`
-    ]
-  };
+function attemptGraduation({minor, major}: EducationTerm, char: Character): Character {
+  return roll(DM(INT(char))) > 6 ? graduate(char, minor, major) : flunk(char)
 }
 
+const flunk = ramda.identity
+
+const exists = not(is(undefined));
 
 test('withGraduation', {
-  "applies graduation benefits if passed"(){
-    const char = newCharacter();
-    expect(withGraduation({major: "Admin", minor: "Animals"}, char).skills, hasProperties, {
-      "Admin": 1,
-      "Animals": 2
-    });
+  "graduates some students"() {
+    const studentBody = ramda.times(() => newCharacter(), 30)
+      .map((char) => attemptGraduation({major: "Admin", minor: "Animals"}, char))
+    expect(studentBody.find(({skills}) => skills.Admin === 2), exists)
+  },
+  "flunks some students"() {
+    const studentBody = ramda.times(() => newCharacter(), 30)
+     .map((char) => attemptGraduation({major: "Admin", minor: "Animals"}, char))
+    expect(studentBody.find(({skills}) => skills.Admin === undefined), exists)
   }
 })
 
@@ -119,7 +114,22 @@ type EducationTerm = {
   major: Skill
 };
 
-function withMatriculation({minor, major}: EducationTerm, char: Character): Character {
+function graduate(char: Character, minor: string, major: string): Character {
+  return {
+    ...char,
+    skills: {
+      ...char.skills,
+      [minor]: 1,
+      [major]: 2,
+    },
+    log: [
+      ...char.log,
+      `Graduated with a degree in ${major} and a minor in ${minor}`
+    ]
+  };
+}
+
+function declare({minor, major}: EducationTerm, char: Character): Character {
   return {
     ...char,
     skills: {
@@ -137,20 +147,20 @@ function withMatriculation({minor, major}: EducationTerm, char: Character): Char
 
 test("withFields", {
   "adds new skills"(){
-    expect(withMatriculation({minor:"Admin", major: "Animals"}, newCharacter()).skills, equals, {
+    expect(declare({minor:"Admin", major: "Animals"}, newCharacter()).skills, equals, {
       Admin: 0,
       Animals: 1
     })
   },
   "builds on background skills"(){
-    expect(withMatriculation({minor:"Admin", major: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
+    expect(declare({minor:"Admin", major: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
       Admin: 0, // minor
       Animals: 1 // major
     })
   },
   "retains extant skills"(){
     const youth = withBackgroundSkills(newCharacter());
-    expect(withMatriculation({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
+    expect(declare({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
   }
 })
 
