@@ -29,4 +29,5 @@ export type Hex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'a
 
 export const newUPP = (): UPP => times<Hex>(newCharacteristic, 6) as UPP;
 const newCharacteristic = (): Hex => (d6() + d6()).toString(16) as Hex;
+export type CharBuilder = (char: Character) => Character;
 
