@@ -3,9 +3,8 @@ import {default as blessed} from "blessed";
 import {
     grid as Grid, map as Map,
     log as Log
-} from "blessed-contrib"; // @ts-ignore
+} from "blessed-contrib"; 
 import { generate } from './src/character.js';
-
 
 const screen = blessed.screen()
 

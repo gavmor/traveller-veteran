@@ -1,7 +1,11 @@
 {
     "compilerOptions": {
         "module": "ESNext",
-        "moduleResolution": "nodenext"
+        "moduleResolution": "nodenext",
+        "target": "ES2020"
     },
-    "ts-node": { "esm": true }
+    "ts-node": { 
+        "esm": true,
+        "experimentalTsImportSpecifiers": true
+    }
 }

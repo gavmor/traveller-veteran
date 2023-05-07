@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "ts-node --logError display.ts",
-    "test": "ts-node --logError test.ts",
+    "test": "bun test.ts",
     "watch": "onchange -i -k '**/*.ts*' -- yarn start",
     "test-watch": "onchange -i -k '**/*.ts*' -- yarn test"
   }

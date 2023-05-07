@@ -1,5 +1,6 @@
 import { take, times } from 'ramda';
 import { shuffler } from "./lib/shuffler.js";
+import { d6, DM, EDU } from './mechanics.js';
 
 const AcademicSkills = ["Admin", "Advocate", "Animals",  "Animals.Training", "Animals.Veterinary", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"]
 
@@ -13,7 +14,7 @@ type Skillset = Partial<Record<Skill, number>>;
 const shuffle = shuffler(Math.random);
 
 type Hex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'a' | 'b' | 'c' | 'd' | 'e'| 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
-interface Character {
+export interface Character {
     upp: Hex[];
     skills: Skillset;
 }
@@ -52,46 +53,29 @@ function withMilitaryAcademy(char: Character): Character {
 }
 
 
-export const generate = (): Character => 
-    withEducation(wBgndSkills(newCharacter()));
+export const generate = (): Character => withEducation(withBackgroundSkills(newCharacter()));
 
-const assignAtZero = (acc: Skillset, skill: Skill): {} => 
-    Object.assign(acc, { [skill]: 0 });
-const UPP = (): Hex[] => times(rollCharacteristics, 6)
-const rollCharacteristics = (): Hex => (d6() + d6())
-    .toString(16) as Hex;
-const d6 = (): number => Math.ceil(Math.random() * 6);
+const assignAtZero = (acc: Skillset, skill: Skill): {} => Object.assign(acc, { [skill]: 0 });
 
-export function wBgndSkills(char: Character): Character {
-    return Object.assign(
-        char,
-        { 
-            skills: pickSkills(
-                DM(EDU(char)) + 3,
-                BackgroundSkills
-            ).reduce(assignAtZero, {}) 
-        }
-    );
-}
+const newUPP = (): Hex[] => times(newCharacteristic, 6)
 
-const pickSkills = (n: number, skills: Skill[]): Skill[] => 
-    take(n, shuffle(skills));
+const newCharacteristic = (): Hex => (d6() + d6()).toString(16) as Hex;
 
-function DM(score: number): number {
-    if (score > 14) return 3
-    if (score > 11) return 2
-    if (score > 8) return 1
-    if (score > 5) return 0
-    if (score > 2) return -1
-    if (score > 0) return -2
-    return -3
-}
+export const withBackgroundSkills = (char: Character): Character => Object.assign(
+    char,
+    { 
+        skills: pickSkills(
+            DM(EDU(char)) + 3,
+            BackgroundSkills
+        ).reduce(assignAtZero, {}) 
+    }
+);
+
+const pickSkills = (n: number, skills: Skill[]): Skill[] => take(n, shuffle(skills));
+
 const newCharacter = (): Character => ({
-    upp: UPP(),
+    upp: newUPP(),
     skills: {}
 })
 
 
-function EDU(char: Character) {
-    return parseInt(char.upp[4], 16);
-}
