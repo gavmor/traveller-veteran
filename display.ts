@@ -27,5 +27,5 @@ setInterval(() => {
     const char = generate();
     log.log(char.upp.join("").toUpperCase());
     log.log("  " + JSON.stringify(char.skills))
-    log.log("  " + JSON.stringify(char.events))
+    log.log("  " + JSON.stringify(char.log))
 }, 100);

@@ -1,9 +1,11 @@
 import { roll, SOC } from "./Game.js";
-import { take } from 'ramda';
+import * as ramda from 'ramda';
 import { d6, DM, EDU } from './Game.js';
 import { Character, AcademicSkills, Skillset, Skill, BackgroundSkills as BACKGROUND_SKILLS, shuffle, newUPP, AllSkills } from './Character.js';
 import { newCharacter } from "./Character.js";
-import { equals, expect, not, test } from "@benchristel/taste";
+import { curry, equals, expect, not, test } from "@benchristel/taste";
+import { d66 } from "./Game.js";
+import { d66Table } from "./Game.js";
 
 export const generate = (): Character => withEducation(withBackgroundSkills(newCharacter()));
 
@@ -17,61 +19,72 @@ function withEducation(char: Character): Character {
 
 function withUniversity(char: Character): Character {
     return roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7 
-        ? withHobby(withAdmission(char))
+        ? withAdmission(char)
         : char;
 }
 
 function withAdmission(char: Character): Character {
-  const [major, minor]: Skill[] = take<Skill>(2, shuffle(AcademicSkills))
+  const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills))
   
-  return withFields(minor, major, char)
-}
-
-const withHobby = (char: Character): Character => {
-  const hobby: Skill = take(1, AllSkills)[0] as Skill
-  return {
-    ...char,
-    skills: {
-      ...char.skills,
-      [hobby]: char.skills[hobby] || 0
-    }
-  };
+  return withEducationEvent[d66()](withFields(minor, major, char))
 }
 
 
-const EducationEvents = {
-    "Psionics": function(char) {
-      // ...
+
+const includes = curry(ramda.includes, "includes");
+
+test("withEducationEvent", {
+  "Clique logs an entry"(){
+    expect(withEducationEvent[6](newCharacter()).log, includes, "Born")
+    expect(withEducationEvent[6](newCharacter()).log, includes, "Joined a Clique")
+  },
+  "Clique adds d3 allies"(){
+    expect(withEducationEvent[6](newCharacter()).allies, includes, "Bjorn")
+  }
+})
+
+type CharBuilder = (char: Character) => Character;
+
+const withEducationEvent: d66Table<CharBuilder> = {
+    2: function Psionics(char) {
+      return char;
     },
-    "Tragedy": function(char) {
-      // ...
+    3: function Tragedy(char) {
+      return char;
     },
-    "Prank": function(char) {
-      // ...
+    4: function Prank(char) {
+      return char;
     },
-    "Party": function(char) {
-      // ...
+    5: function Party(char) {
+      return char;
     },
-    "Clique": function(char) {
-      // ...
+    6: function Clique(char) {
+      return {
+        ...char,
+        log: [...char.log, "Joined a Clique"],
+        allies: [
+          ...char.allies,
+          ...ramda.times(() => "Bjorn",(d6()%3)+1)
+        ]
+      };
     },
-    "LifeEvent": function(char) {
-      // ...
+    7: function LifeEvent(char) {
+      return char;
     },
-    "Politics": function(char) {
-      // ...
+    8: function Politics(char) {
+      return char;
     },
-    "Hobby": function(char) {
-      // ...
+    9: function Hobby(char) {
+      return char;
     },
-    "Tutor": function(char) {
-      // ...
+    10: function Tutor(char) {
+      return char;
     },
-    "War": function(char) {
-      // ...
+    11: function War(char) {
+      return char;
     },
-    "Recognition": function(char) {
-      // ...
+    12: function Recognition(char) {
+      return char;
     }
   }
 
@@ -83,8 +96,8 @@ function withFields(minor: Skill, major: Skill, char: Character): Character {
       [minor]: char.skills[minor] || 0,
       [major]: char.skills[major] || 1, // clobbers
     },
-    events: [
-      ...char.events,
+    log: [
+      ...char.log,
       `Admitted to University`,
       `Majoring in ${major} with a minor in ${minor}`
     ]
@@ -135,7 +148,7 @@ test("withBackgroundSkills", {
     }
 });
 
-const sample = <T>(n: number, items: T[]): T[] => take(n, shuffle(items));
+const sample = <T>(n: number, items: T[]): T[] => ramda.take(n, shuffle(items));
 
 function hasProperties(expected: any, actual: any): boolean {
   return equals({...expected,...actual}, actual);
@@ -155,3 +168,4 @@ test("hasProperties", {
     expect({foo: "bar", baz: "qux"}, hasProperties, {foo: "bar"});
   }
 })
+

@@ -14,5 +14,8 @@ export function DM(score: number): number {
 }
 export const d6 = (): number => Math.ceil(Math.random() * 6);
 
-export const roll = (mod: number): number => d6()+d6()+mod;
+export const roll = (mod: number): number => d66()+mod;
+export type d66Result = 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+export type d66Table<T> = Record<d66Result, T>;
+export const d66 = ():d66Result => d6()+d6() as d66Result;
 

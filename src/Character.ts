@@ -3,13 +3,14 @@ import { d6 } from "./Game.js";
 import { shuffler } from "./lib/shuffler.js";
 
 export interface Character {
+    allies: string[];
     upp: Hex[];
     skills: Skillset;
-    events: string[];
+    log: string[];
 }
 
 export const newCharacter = (upp:Hex[]=newUPP()): Character => ({
-    upp, skills: {}, events: ["Born"]
+    upp, skills: {}, log: ["Born"], allies: [],
 });
 
 export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"];
