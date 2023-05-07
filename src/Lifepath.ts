@@ -26,17 +26,32 @@ function withUniversity(char: Character): Character {
 function withAdmission(char: Character): Character {
   const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills))
   
-  return withGraduation(withEducationEvent[d66()](withMatriculation({major, minor}, char)))
+  return withGraduation({major,minor},withEducationEvent[d66()](withMatriculation({major, minor}, char)))
 }
 
-function withGraduation(char: Character): Character {
-  return char;
+function withGraduation({minor, major}: EducationTerm, char: Character): Character {
+  return {
+    ...char,
+    skills: {
+      ...char.skills,
+      [minor]: 1,
+      [major]: 2, 
+    },
+    log: [
+      ...char.log,
+      `Graduated with a degree in ${major} and a minor in ${minor}`
+    ]
+  };
 }
+
 
 test('withGraduation', {
   "applies graduation benefits if passed"(){
     const char = newCharacter();
-    expect(withGraduation(char), hasProperties, char);
+    expect(withGraduation({major: "Admin", minor: "Animals"}, char).skills, hasProperties, {
+      "Admin": 1,
+      "Animals": 2
+    });
   }
 })
 
@@ -122,13 +137,13 @@ function withMatriculation({minor, major}: EducationTerm, char: Character): Char
 
 test("withFields", {
   "adds new skills"(){
-    expect(withMatriculation({major:"Admin", minor: "Animals"}, newCharacter()).skills, equals, {
+    expect(withMatriculation({minor:"Admin", major: "Animals"}, newCharacter()).skills, equals, {
       Admin: 0,
       Animals: 1
     })
   },
   "builds on background skills"(){
-    expect(withMatriculation({major:"Admin", minor: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
+    expect(withMatriculation({minor:"Admin", major: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
       Admin: 0, // minor
       Animals: 1 // major
     })
