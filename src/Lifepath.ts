@@ -1,4 +1,4 @@
-import { roll } from "./Game.js";
+import { roll, SOC } from "./Game.js";
 import { take } from 'ramda';
 import { d6, DM, EDU } from './Game.js';
 import { Character, AcademicSkills, Skillset, Skill, BackgroundSkills, shuffle, newUPP } from './Character.js';
@@ -16,7 +16,7 @@ function withEducation(char: Character): Character {
 }
 
 function withUniversity(char: Character): Character {
-    return roll(EDU(char)) >= 7 
+    return roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7 
         ? withAdmission(char)
         : char;
 }

@@ -1,6 +1,7 @@
 import { Character } from './Character.js';
 
 export const EDU = (char: Character) => parseInt(char.upp[4], 16);
+export const SOC = (char: Character) => parseInt(char.upp[5], 16);
 
 export function DM(score: number): number { 
     if (score > 14) return 3;
