@@ -1,10 +1,11 @@
 
-import * as blessed from "blessed";
+import {default as blessed} from "blessed";
 import {
     grid as Grid, map as Map,
     log as Log
 } from "blessed-contrib"; // @ts-ignore
-import { generate } from './src/character';
+import { generate } from './src/character.js';
+
 
 const screen = blessed.screen()
 

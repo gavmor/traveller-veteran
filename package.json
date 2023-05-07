@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A program which generates Traveller RPG characters iteratively, preserving the eldest surviving character.",
   "main": "display.ts",
+  "type": "module",
   "author": "Gavin Morgan",
   "license": "MIT",
   "dependencies": {
@@ -18,7 +19,9 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "start": "ts-node --logError .",
-    "watch": "onchange -i -k '**/*.ts*' -- yarn start"
+    "start": "ts-node --logError display.ts",
+    "test": "ts-node --logError test.ts",
+    "watch": "onchange -i -k '**/*.ts*' -- yarn start",
+    "test-watch": "onchange -i -k '**/*.ts*' -- yarn test"
   }
 }

@@ -1,5 +1,5 @@
 import { take, times } from 'ramda';
-import { shuffler } from "./lib/shuffler";
+import { shuffler } from "./lib/shuffler.js";
 
 const AcademicSkills = ["Admin", "Advocate", "Animals",  "Animals.Training", "Animals.Veterinary", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"]
 
