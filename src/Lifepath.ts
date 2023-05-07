@@ -26,9 +26,19 @@ function withUniversity(char: Character): Character {
 function withAdmission(char: Character): Character {
   const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills))
   
-  return withEducationEvent[d66()](withFields(minor, major, char))
+  return withGraduation(withEducationEvent[d66()](withMatriculation({major, minor}, char)))
 }
 
+function withGraduation(char: Character): Character {
+  return char;
+}
+
+test('withGraduation', {
+  "applies graduation benefits if passed"(){
+    const char = newCharacter();
+    expect(withGraduation(char), hasProperties, char);
+  }
+})
 
 
 const includes = curry(ramda.includes, "includes");
@@ -44,19 +54,20 @@ test("withEducationEvent", {
 })
 
 type CharBuilder = (char: Character) => Character;
+// TODO: Curry these CharBuilder to enable pipeline syntax
 
 const withEducationEvent: d66Table<CharBuilder> = {
     2: function Psionics(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     3: function Tragedy(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     4: function Prank(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     5: function Party(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     6: function Clique(char) {
       return {
@@ -69,26 +80,31 @@ const withEducationEvent: d66Table<CharBuilder> = {
       };
     },
     7: function LifeEvent(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     8: function Politics(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     9: function Hobby(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     10: function Tutor(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     11: function War(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     },
     12: function Recognition(char) {
-      return char;
+      return char; // TODO: Implement Education Event
     }
   }
 
-function withFields(minor: Skill, major: Skill, char: Character): Character {
+type EducationTerm = {
+  minor: Skill
+  major: Skill
+};
+
+function withMatriculation({minor, major}: EducationTerm, char: Character): Character {
   return {
     ...char,
     skills: {
@@ -106,20 +122,20 @@ function withFields(minor: Skill, major: Skill, char: Character): Character {
 
 test("withFields", {
   "adds new skills"(){
-    expect(withFields("Admin", "Animals", newCharacter()).skills, equals, {
+    expect(withMatriculation({major:"Admin", minor: "Animals"}, newCharacter()).skills, equals, {
       Admin: 0,
       Animals: 1
     })
   },
   "builds on background skills"(){
-    expect(withFields("Admin", "Animals", withBackgroundSkills(newCharacter())).skills, hasProperties, {
+    expect(withMatriculation({major:"Admin", minor: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
       Admin: 0, // minor
       Animals: 1 // major
     })
   },
   "retains extant skills"(){
     const youth = withBackgroundSkills(newCharacter());
-    expect(withFields("Admin", "Animals", youth).skills, hasProperties, youth.skills)
+    expect(withMatriculation({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
   }
 })
 

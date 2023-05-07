@@ -2,14 +2,16 @@ import { times } from "ramda";
 import { d6 } from "./Game.js";
 import { shuffler } from "./lib/shuffler.js";
 
+type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
+
 export interface Character {
     allies: string[];
-    upp: Hex[];
+    upp: UPP;
     skills: Skillset;
     log: string[];
 }
 
-export const newCharacter = (upp:Hex[]=newUPP()): Character => ({
+export const newCharacter = (upp:UPP=newUPP()): Character => ({
     upp, skills: {}, log: ["Born"], allies: [],
 });
 
@@ -25,6 +27,6 @@ export const shuffle = shuffler(Math.random);
 export type Hex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
 
-export const newUPP = (): Hex[] => times(newCharacteristic, 6);
+export const newUPP = (): UPP => times<Hex>(newCharacteristic, 6) as UPP;
 const newCharacteristic = (): Hex => (d6() + d6()).toString(16) as Hex;
 
