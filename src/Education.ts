@@ -3,10 +3,10 @@ import * as ramda from 'ramda';
 import { d6, DM, EDU } from './Game.js';
 import { Character, AcademicSkills, Skill, shuffle, CharBuilder } from './Character.js';
 import { newCharacter } from "./Character.js";
-import { curry, equals, expect, is, not, test } from "@benchristel/taste";
+import { equals, expect, test } from "@benchristel/taste";
 import { d66 } from "./Game.js";
 import { withBackgroundSkills } from "./Background.js";
-import { hasProperties } from "./lib/hasProperties.js";
+import { exists, includes, hasProperties } from "./lib/taste.js";
 
 export function withEducation(char: Character): Character {
   switch (d6() % 3) {
@@ -15,6 +15,7 @@ export function withEducation(char: Character): Character {
     default: return char;
   }
 }
+
 function withUniversity(char: Character): Character {
   return roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7
     ? matriculate(char)
@@ -29,7 +30,7 @@ function attemptGraduation({ minor, major }: EducationTerm, char: Character): Ch
   return roll(DM(INT(char))) > 6 ? graduate(char, minor, major) : flunk(char);
 }
 const flunk = ramda.identity;
-const exists = not(is(undefined));
+
 test('withGraduation', {
   "graduates some students"() {
     const studentBody = ramda.times(() => newCharacter(), 30)
@@ -42,7 +43,9 @@ test('withGraduation', {
     expect(studentBody.find(({ skills }) => skills.Admin === undefined), exists);
   }
 });
-const includes = curry(ramda.includes, "includes");
+
+
+
 test("withEducationEvent", {
   "Clique logs an entry"() {
     expect(withEducationEvent[6](newCharacter()).log, includes, "Born");
@@ -97,8 +100,8 @@ export const withEducationEvent: d66Table<CharBuilder> = {
 }
 
 export type EducationTerm = {
-minor: Skill
-major: Skill
+  minor: Skill
+  major: Skill
 };
 
 export function graduate(char: Character, minor: string, major: string): Character {
