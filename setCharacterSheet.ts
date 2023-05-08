@@ -1,7 +1,7 @@
 
 import {default as blessed} from "blessed";
 const {box: Box} = blessed;
-import { markdown as Markdown, tree as Tree } from "blessed-contrib";
+import { markdown as Markdown, log as Log } from "blessed-contrib";
 import { Character, Skillset } from "./src/Character.js";
 import { grid } from "./display.js";
 
@@ -48,19 +48,27 @@ export function setCharacterSheet(char: Character) {
         style: { fg: 'white', }
     });
 
-    grid.set(2 + 6, 0, 6, 12, Box, {
+    grid.set(2 + 6, 0, 3, 12, Box, {
         label: 'Skills',
         content: classicSkillAnnotation(char.skills),
         style: { fg: 'white', }
     });
 
-
-    
-    grid.set(2 + 12, 0, 2, 12, Markdown, {
+    grid.set(2 + 9, 0, 2, 12, Markdown, {
         label: '',
         content: "SERVICE HISTORY",
         style: { fg: 'magenta', border: { fg: 'black' } }
     });
+    
+    // grid.set(0, 12, 2, 12, Markdown, {
+    //     label: '',
+    //     content: "LIFE PATH",
+    //     style: { fg: 'magenta', border: { fg: 'black' } }
+    // });
+    const log = grid.set(2,12,22,12, Log, {
+        label: "Lifepath"
+    })
+    char.log.forEach((entry:string) => log.log(entry));
 }
 
 function classicSkillAnnotation(skills: Skillset): string {
