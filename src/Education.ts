@@ -9,10 +9,9 @@ import { withBackgroundSkills } from "./Background.js";
 import { exists, includes, hasProperties } from "./lib/taste.js";
 
 export function withEducation(char: Character): Character {
-  switch (d6() % 3) {
-    case 1: return withUniversity(char);
-    case 2: return withMilitaryAcademy(char);
-    default: return char;
+  switch (d6() % 2) {
+    case 0: return withUniversity(char);
+    default: return withMilitaryAcademy(char);
   }
 }
 

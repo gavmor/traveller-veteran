@@ -7,12 +7,16 @@ import { d6 } from './Game.js';
 import { screen } from '../display.js';
 
 
-const term: CharBuilder = (char) => {
-    // screen.debug((d6() % 2).toString());
-    return d6() % 3 > 0 ? term(withEducation(char)) : char
+
+export function withTerm(char: Character): Character {
+    switch (d6() % 3) {
+        case 1: return withTerm(withEducation({...char, age: char.age + 1}));
+        case 2: return withTerm(withEducation({...char, age: char.age + 1}));
+        default: return char.age < 1 ? withTerm(char) : char;
+    }
 }
 
-export const generate = (): Character => term(withBackgroundSkills(newCharacter(
+export const generate = (): Character => withTerm(withBackgroundSkills(newCharacter(
     newUPP(),
     faker.name.fullName()
 )));

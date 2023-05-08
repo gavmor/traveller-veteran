@@ -38,8 +38,8 @@ export function setCharacterSheet(char: Character) {
         style: { fg: 'white', }
     });
     grid.set(2 + 4, 0, 2, 6, Box, {
-        label: 'Age Modifiers',
-        content: char.upp.join("").toUpperCase(),
+        label: 'Age',
+        content: `${char.age} Terms`,
         style: { fg: 'white', }
     });
     grid.set(2 + 4, 6, 2, 6, Box, {

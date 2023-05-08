@@ -10,10 +10,11 @@ export interface Character {
     upp: UPP;
     skills: Skillset;
     log: string[];
+    age: number;
 }
 
 export const newCharacter = (upp:UPP=newUPP(), name:string=(Math.random() + 1).toString(36).substring(7)): Character => ({
-    upp, skills: {}, log: ["Born"], allies: [], name
+    upp, skills: {}, log: ["Born"], allies: [], name, age: 0
 });
 
 export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"];
