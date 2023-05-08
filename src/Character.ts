@@ -21,7 +21,7 @@ export const newCharacter = (
 ): Character => ({
   upp,
   skills: {},
-  log: [`Born on ${birthworld}`],
+  log: [`Born`],
   allies: [],
   name,
   age: 0,

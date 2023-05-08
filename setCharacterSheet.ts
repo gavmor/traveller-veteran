@@ -47,7 +47,7 @@ export function setCharacterSheet(char: Character) {
     });
     grid.set(2 + 4, 6, 2, 6, Box, {
         label: 'Birthworld',
-        content: char.birthworld.toUpperCase(),
+        content: char.birthworld,
         style: { fg: 'white', }
     });
 

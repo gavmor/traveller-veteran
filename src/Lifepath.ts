@@ -6,11 +6,12 @@ import { faker } from '@faker-js/faker';
 import { d6 } from './Game.js';
 import { withCareer } from './Career.js';
 import { planetNameGenerator } from "planet-name-generator"
+import { planetCase } from './lib/string.js';
 
 export const generate = (): Character => withTerm(withBackgroundSkills(newCharacter(
     newUPP(),
     faker.name.fullName(),
-    planetNameGenerator(1)[0]
+    planetCase(planetNameGenerator(1)[0])
 )));
 
 function withTerm(char: Character): Character {
