@@ -4,7 +4,10 @@ const {box: Box} = blessed;
 import { markdown as Markdown, log as Log } from "blessed-contrib";
 import { Character, Skillset } from "./src/Character.js";
 import { grid } from "./display.js";
+import {planetNameGenerator} from "planet-name-generator"
 
+const CURRENT_YEAR = new Date().getFullYear() - 1979 + 1105;
+const AGE_OF_MAJORITY = 18;
 export function setCharacterSheet(char: Character) {
     grid.set(0, 0, 2, 12, Markdown, {
         label: '',
@@ -34,17 +37,17 @@ export function setCharacterSheet(char: Character) {
     });
     grid.set(2 + 2, 6, 2, 6, Box, {
         label: 'Birthdate',
-        content: char.upp.join("").toUpperCase(),
+        content: (CURRENT_YEAR - AGE_OF_MAJORITY - char.age*4).toString(),
         style: { fg: 'white', }
     });
     grid.set(2 + 4, 0, 2, 6, Box, {
         label: 'Age',
-        content: `${char.age} Terms`,
+        content: `${AGE_OF_MAJORITY + char.age*4} years`,
         style: { fg: 'white', }
     });
     grid.set(2 + 4, 6, 2, 6, Box, {
         label: 'Birthworld',
-        content: char.upp.join("").toUpperCase(),
+        content: char.birthworld.toUpperCase(),
         style: { fg: 'white', }
     });
 

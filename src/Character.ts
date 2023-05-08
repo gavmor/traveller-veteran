@@ -11,10 +11,21 @@ export interface Character {
     skills: Skillset;
     log: string[];
     age: number;
+    birthworld: string;
 }
 
-export const newCharacter = (upp:UPP=newUPP(), name:string=(Math.random() + 1).toString(36).substring(7)): Character => ({
-    upp, skills: {}, log: ["Born"], allies: [], name, age: 0
+export const newCharacter = (
+  upp: UPP = newUPP(),
+  name: string = harmlessString(),
+  birthworld: string = harmlessString()
+): Character => ({
+  upp,
+  skills: {},
+  log: [`Born on ${birthworld}`],
+  allies: [],
+  name,
+  age: 0,
+  birthworld,
 });
 
 export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"];
@@ -32,4 +43,8 @@ export type Hex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'a
 export const newUPP = (): UPP => times<Hex>(newCharacteristic, 6) as UPP;
 const newCharacteristic = (): Hex => (d6() + d6()).toString(16) as Hex;
 export type CharBuilder = (char: Character) => Character;
+
+function harmlessString(): string {
+    return (Math.random() + 1).toString(36).substring(7);
+}
 
