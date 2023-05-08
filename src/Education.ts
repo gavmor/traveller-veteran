@@ -21,6 +21,7 @@ function withUniversity(char: Character): Character {
     ? matriculate(char)
     : char;
 }
+
 function matriculate(char: Character): Character {
   const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills));
 
@@ -129,6 +130,7 @@ return {
   },
   log: [
     ...char.log,
+    `-----------------------`,
     `Admitted to University`,
     `Majoring in ${major} with a minor in ${minor}`
   ]

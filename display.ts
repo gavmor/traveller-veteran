@@ -4,10 +4,9 @@ import {
     grid as Grid, map as Map,
     log as Log} from "blessed-contrib"; 
 import { generate } from './src/Lifepath.js';
-import { newUPP } from "./src/Character.js";
 import { setCharacterSheet } from "./setCharacterSheet.js";
 
-const screen = blessed.screen({debug: true});
+export const screen = blessed.screen({debug: true});
 
 export const grid = new Grid({
     rows: 24, cols: 24, screen: screen
