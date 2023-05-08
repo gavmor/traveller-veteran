@@ -5,6 +5,8 @@ import {
     log as Log} from "blessed-contrib"; 
 import { generate } from './src/Lifepath.js';
 import { setCharacterSheet } from "./setCharacterSheet.js";
+import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
+import { Character } from "./src/Character.js";
 
 export const screen = blessed.screen({debug: true});
 
@@ -19,13 +21,15 @@ screen.key(
     () => process.exit(0)
 );
 
-setInterval(() => {
-    const char = generate();
-    setCharacterSheet(generate());
-//     log.log(char.upp.join("").toUpperCase());
-//     log.log("  " + JSON.stringify(char.skills))
-//     log.log("  " + JSON.stringify(char.log))
-    
 
-    screen.render()
-}, 500)
+const sheet = setCharacterSheet(generate());
+const universe: Character[] = [];
+const showSheet = (char) => {
+    universe.push(char);
+    sheet.name.setContent(char.name);
+    sheet.skills.setContent(classicSkillAnnotation(char.skills));
+    char.log.forEach((entry:string) => sheet.log.log(entry))
+    screen.debug(universe.length.toString())
+}
+
+setInterval(() => showSheet(generate()), 500);

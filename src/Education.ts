@@ -129,7 +129,6 @@ return {
   },
   log: [
     ...char.log,
-    `-----------------------`,
     `Admitted to University`,
     `Majoring in ${major} with a minor in ${minor}`
   ]
@@ -157,6 +156,7 @@ test("declare", {
 
 export function withMilitaryAcademy(char: Character): Character {
   return {
-    ...char
+    ...char,
+    log: [ ...char.log, "Admitted to Military Academy"],
   }
 }
