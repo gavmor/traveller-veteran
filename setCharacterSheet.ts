@@ -13,7 +13,7 @@ export function setCharacterSheet(char: Character) {
     });
     grid.set(2 + 0, 0, 2, 7, Box, {
         label: 'Name',
-        content: "John",
+        content: char.name,
         style: { fg: 'white', }
     });
 

@@ -5,14 +5,15 @@ import { shuffler } from "./lib/shuffler.js";
 type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
 export interface Character {
+    name: string;
     allies: string[];
     upp: UPP;
     skills: Skillset;
     log: string[];
 }
 
-export const newCharacter = (upp:UPP=newUPP()): Character => ({
-    upp, skills: {}, log: ["Born"], allies: [],
+export const newCharacter = (upp:UPP=newUPP(), name:string=(Math.random() + 1).toString(36).substring(7)): Character => ({
+    upp, skills: {}, log: ["Born"], allies: [], name
 });
 
 export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"];
