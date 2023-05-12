@@ -9,7 +9,9 @@ import { withBackgroundSkills } from "./Background.js";
 import { includes, hasProperties } from "./lib/taste.js";
 
 export function withEducation(char: Character): Character {
-  return (d6() % 2) > 0 ? tryUniversity(char) : withMilitaryAcademy(char);
+  return Math.random() > 0.5
+    ? tryUniversity(char) 
+    : withMilitaryAcademy(char);
 }
 
 function tryUniversity(char: Character): Character {
