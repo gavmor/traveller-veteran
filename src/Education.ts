@@ -6,7 +6,7 @@ import { newCharacter } from "./Character.js";
 import { equals, expect, test } from "@benchristel/taste";
 import { d66 } from "./Game.js";
 import { withBackgroundSkills } from "./Background.js";
-import { exists, includes, hasProperties } from "./lib/taste.js";
+import { includes, hasProperties } from "./lib/taste.js";
 
 export function withEducation(char: Character): Character {
   return (d6() % 2) > 0 ? tryUniversity(char) : withMilitaryAcademy(char);
@@ -38,7 +38,15 @@ function selectCourse(): EducationTerm {
 
 const flunk = ramda.identity;
 
-
+// test("WithEducation", {
+//   "attempts matriculation"(){},
+//   "if matriculated, adds skills"(){
+//     expect(Object.values(withEducation(newCharacter()).skills), equals, [0,1])
+//   },
+//   // "if graduated, adds more"(){
+//   //   expect(withEducation(newCharacter()), equals, {})
+//   // }
+// })
 
 test("withEducationEvent", {
   "Clique logs an entry"() {
