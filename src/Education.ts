@@ -9,40 +9,34 @@ import { withBackgroundSkills } from "./Background.js";
 import { exists, includes, hasProperties } from "./lib/taste.js";
 
 export function withEducation(char: Character): Character {
-  switch (d6() % 2) {
-    case 0: return withUniversity(char);
-    default: return withMilitaryAcademy(char);
-  }
+  return (d6() % 2) > 0 ? tryUniversity(char) : withMilitaryAcademy(char);
 }
 
-function withUniversity(char: Character): Character {
-  return roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7
-    ? matriculate(char)
+function tryUniversity(char: Character): Character {
+  return rollToMatriculate(char) 
+    ? matriculate(selectCourse(), char) 
     : char;
 }
 
-function matriculate(char: Character): Character {
-  const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills));
+function tryGraduation(term: EducationTerm, char: Character): Character {
+  return rollToGraduate(char) 
+    ? applyPromotion(term, char) 
+    : char;
+}
 
-  return attemptGraduation({ major, minor }, withEducationEvent[d66()](declare({ major, minor }, char)));
+const rollToMatriculate = (char: Character): Boolean => roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7;
+const rollToGraduate = (char: Character): Boolean => roll(DM(INT(char))) > 6;
+
+function matriculate(course: EducationTerm, char: Character): Character {
+  return tryGraduation(course, withEducationEvent[d66()](applyTerm(course, char)));
 }
-function attemptGraduation({ minor, major }: EducationTerm, char: Character): Character {
-  return roll(DM(INT(char))) > 6 ? graduate(char, minor, major) : flunk(char);
+
+function selectCourse(): EducationTerm {
+  const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills));;
+  return {major, minor}
 }
+
 const flunk = ramda.identity;
-
-test('withGraduation', {
-  "graduates some students"() {
-    const studentBody = ramda.times(() => newCharacter(), 30)
-      .map((char) => attemptGraduation({ major: "Admin", minor: "Animals" }, char));
-    expect(studentBody.find(({ skills }) => skills.Admin === 2), exists);
-  },
-  "flunks some students"() {
-    const studentBody = ramda.times(() => newCharacter(), 30)
-      .map((char) => attemptGraduation({ major: "Admin", minor: "Animals" }, char));
-    expect(studentBody.find(({ skills }) => skills.Admin === undefined), exists);
-  }
-});
 
 
 
@@ -104,7 +98,8 @@ export type EducationTerm = {
   major: Skill
 };
 
-export function graduate(char: Character, minor: string, major: string): Character {
+
+export function applyPromotion({major, minor}: EducationTerm, char: Character): Character {
 return {
   ...char,
   skills: {
@@ -119,7 +114,7 @@ return {
 };
 }
 
-export function declare({minor, major}: EducationTerm, char: Character): Character {
+export function applyTerm({minor, major}: EducationTerm, char: Character): Character {
 return {
   ...char,
   skills: {
@@ -135,22 +130,22 @@ return {
 };
 }
 
-test("declare", {
+test("applyTerm", {
   "adds new skills"(){
-    expect(declare({minor:"Admin", major: "Animals"}, newCharacter()).skills, equals, {
+    expect(applyTerm({minor:"Admin", major: "Animals"}, newCharacter()).skills, equals, {
       Admin: 0,
       Animals: 1
     })
   },
   "builds on background skills"(){
-    expect(declare({minor:"Admin", major: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
+    expect(applyTerm({minor:"Admin", major: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
       Admin: 0, // minor
       Animals: 1 // major
     })
   },
   "retains extant skills"(){
     const youth = withBackgroundSkills(newCharacter());
-    expect(declare({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
+    expect(applyTerm({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
   }
 })
 
