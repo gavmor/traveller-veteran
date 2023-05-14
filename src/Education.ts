@@ -13,19 +13,20 @@ export function withEducation(
   term: EducationTerm = selectCourse(),
   withEvent: CharBuilder = withEducationEvent[d66()],
   selectsUniversity: boolean = Math.random() > 0.5,
-  ): Character {
-  const admitted: boolean = rollToQualify(char)
-  const undergrad: Character = withEvent(applyTerm(term, char))
+): Character {
   return selectsUniversity
-    ? (admitted 
-      ? (rollToGraduate(undergrad) ? withGraduation(term, undergrad) : undergrad)
-      : char)  
+    ? rollToQualify(char) 
+      ? maybeGraduate(withEvent(withTerm(term, char)), term)
+      : char  
     : withMilitaryAcademy(char);
-  
 }
 
 const rollToQualify = (char: Character): boolean => roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7;
 const rollToGraduate = (char: Character): boolean => roll(DM(INT(char))) > 6;
+
+const maybeGraduate = (undergrad: Character, term: EducationTerm): Character => 
+  rollToGraduate(undergrad) ? withGraduation(term, undergrad) : undergrad;
+
 
 function selectCourse(): EducationTerm {
   const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills));;
@@ -118,7 +119,7 @@ return {
 };
 }
 
-export function applyTerm({minor, major}: EducationTerm, char: Character): Character {
+export function withTerm({minor, major}: EducationTerm, char: Character): Character {
 return {
   ...char,
   skills: {
@@ -136,20 +137,20 @@ return {
 
 test("applyTerm", {
   "adds new skills"(){
-    expect(applyTerm({minor:"Admin", major: "Animals"}, newCharacter()).skills, equals, {
+    expect(withTerm({minor:"Admin", major: "Animals"}, newCharacter()).skills, equals, {
       Admin: 0,
       Animals: 1
     })
   },
   "builds on background skills"(){
-    expect(applyTerm({minor:"Admin", major: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
+    expect(withTerm({minor:"Admin", major: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
       Admin: 0, // minor
       Animals: 1 // major
     })
   },
   "retains extant skills"(){
     const youth = withBackgroundSkills(newCharacter());
-    expect(applyTerm({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
+    expect(withTerm({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
   }
 })
 
