@@ -13,13 +13,12 @@ export function withEducation(
   term: EducationTerm = selectCourse(),
   withEvent: CharBuilder = withEducationEvent[d66()],
   selectsUniversity: boolean = Math.random() > 0.5,
-  admitted: boolean = rollToQualify(char),
-  undergrad: Character = withEvent(applyTerm(term, char)),
-  willGraduate: boolean = rollToGraduate(undergrad)
-): Character {
+  ): Character {
+  const admitted: boolean = rollToQualify(char)
+  const undergrad: Character = withEvent(applyTerm(term, char))
   return selectsUniversity
     ? (admitted 
-      ? (willGraduate ? withGraduation(term, undergrad) : undergrad)
+      ? (rollToGraduate(undergrad) ? withGraduation(term, undergrad) : undergrad)
       : char)  
     : withMilitaryAcademy(char);
   
