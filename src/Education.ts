@@ -8,15 +8,18 @@ import { d66 } from "./Game.js";
 import { withBackgroundSkills } from "./Background.js";
 import { includes, hasProperties } from "./lib/taste.js";
 
-export function withEducation(char: Character): Character {
-  return Math.random() > 0.5
-    ? tryUniversity(char) 
-    : withMilitaryAcademy(char);
+export function withEducation(
+  char: Character,
+  term: EducationTerm = selectCourse(),
+  withEvent: CharBuilder = withEducationEvent[d66()],
+  branch: boolean = Math.random() > 0.5
+): Character {
+  return branch ? tryUniversity(term, char, withEvent) : withMilitaryAcademy(char);
 }
 
-function tryUniversity(char: Character): Character {
-  return rollToMatriculate(char) 
-    ? matriculate(selectCourse(), char) 
+function tryUniversity(term: EducationTerm, char: Character, withEvent:CharBuilder): Character {
+  return rollToQualify(char)
+    ? tryGraduation(term, withEvent(applyTerm(term, char)))
     : char;
 }
 
@@ -26,12 +29,9 @@ function tryGraduation(term: EducationTerm, char: Character): Character {
     : char;
 }
 
-const rollToMatriculate = (char: Character): Boolean => roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7;
+const rollToQualify = (char: Character): Boolean => roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7;
 const rollToGraduate = (char: Character): Boolean => roll(DM(INT(char))) > 6;
 
-function matriculate(course: EducationTerm, char: Character): Character {
-  return tryGraduation(course, withEducationEvent[d66()](applyTerm(course, char)));
-}
 
 function selectCourse(): EducationTerm {
   const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills));;

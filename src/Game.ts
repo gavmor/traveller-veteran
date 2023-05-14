@@ -21,7 +21,6 @@ export type d66Result = 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type d66Table<T> = Record<d66Result, T>;
 export const d66 = ():d66Result => d6()+d6() as d66Result;
 
-
 const Die = {
     *roll(): Generator<number, number>{
         yield this.rolls.shift() || Math.ceil(Math.random() * 6)
