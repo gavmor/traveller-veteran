@@ -40,7 +40,7 @@ export const AllSkills = [...new Set([
 export type Skill = (typeof AllSkills)[number];
 export type Skillset = Partial<Record<Skill, number>>;
 export const shuffle = shuffler(Math.random);
-export type Hex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
+export type Hex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
 
 export const newUPP = (): UPP => times<Hex>(newCharacteristic, 6) as UPP;
