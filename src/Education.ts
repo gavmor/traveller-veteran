@@ -17,21 +17,6 @@ export function withEducation(
   undergrad: Character = withEvent(applyTerm(term, char)),
   willGraduate: boolean = rollToGraduate(undergrad)
 ): Character {
-  if (selectsUniversity && admitted && willGraduate) {
-    return withGraduation(term, undergrad)
-  } else {
-    if(selectsUniversity && admitted && !willGraduate) {
-      return undergrad
-    } else {
-      if(selectsUniversity && !admitted) {
-        return char
-      } else {
-        if(!selectsUniversity) {
-          return withMilitaryAcademy(char)
-        }
-      }
-    } 
-  }
   return selectsUniversity
     ? (admitted 
       ? (willGraduate ? withGraduation(term, undergrad) : undergrad)
