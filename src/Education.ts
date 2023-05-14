@@ -10,8 +10,12 @@ import { includes, hasProperties } from "./lib/taste.js";
 import { last } from "ramda";
 
 test("withEducation", {
-  "without admission"(){},
-  "graduates"(){
+  // this could be a type like Educated?
+  "without admission changes nothing"(){
+    const neophyte = newCharacter([1, 1, 1, 1, 1, 1]);
+    expect(withEducation(neophyte, true), equals, neophyte)
+  },
+  "graduates doubly"(){
     Die.rolls=[6,6,6,6]
     expect(withEducation(newCharacter([6,6,6,6,6,6]), true, {major: "foo", minor: "bar"}, c=>c).skills, equals, {
       foo: 2,
@@ -26,6 +30,7 @@ test("withEducation", {
     })
   },
 })
+
 export function withEducation(
   char: Character,
   selectsUniversity: boolean = Math.random() > 0.5,
