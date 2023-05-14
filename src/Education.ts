@@ -12,26 +12,36 @@ export function withEducation(
   char: Character,
   term: EducationTerm = selectCourse(),
   withEvent: CharBuilder = withEducationEvent[d66()],
-  branch: boolean = Math.random() > 0.5
+  selectsUniversity: boolean = Math.random() > 0.5,
+  admitted: boolean = rollToQualify(char),
+  undergrad: Character = withEvent(applyTerm(term, char)),
+  willGraduate: boolean = rollToGraduate(undergrad)
 ): Character {
-  return branch ? tryUniversity(term, char, withEvent) : withMilitaryAcademy(char);
+  if (selectsUniversity && admitted && willGraduate) {
+    return withGraduation(term, undergrad)
+  } else {
+    if(selectsUniversity && admitted && !willGraduate) {
+      return undergrad
+    } else {
+      if(selectsUniversity && !admitted) {
+        return char
+      } else {
+        if(!selectsUniversity) {
+          return withMilitaryAcademy(char)
+        }
+      }
+    } 
+  }
+  return selectsUniversity
+    ? (admitted 
+      ? (willGraduate ? withGraduation(term, undergrad) : undergrad)
+      : char)  
+    : withMilitaryAcademy(char);
+  
 }
 
-function tryUniversity(term: EducationTerm, char: Character, withEvent:CharBuilder): Character {
-  return rollToQualify(char)
-    ? tryGraduation(term, withEvent(applyTerm(term, char)))
-    : char;
-}
-
-function tryGraduation(term: EducationTerm, char: Character): Character {
-  return rollToGraduate(char) 
-    ? applyPromotion(term, char) 
-    : char;
-}
-
-const rollToQualify = (char: Character): Boolean => roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7;
-const rollToGraduate = (char: Character): Boolean => roll(DM(INT(char))) > 6;
-
+const rollToQualify = (char: Character): boolean => roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7;
+const rollToGraduate = (char: Character): boolean => roll(DM(INT(char))) > 6;
 
 function selectCourse(): EducationTerm {
   const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills));;
@@ -109,7 +119,7 @@ export type EducationTerm = {
 };
 
 
-export function applyPromotion({major, minor}: EducationTerm, char: Character): Character {
+export function withGraduation({major, minor}: EducationTerm, char: Character): Character {
 return {
   ...char,
   skills: {
