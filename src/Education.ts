@@ -7,6 +7,7 @@ import { equals, expect, test } from "@benchristel/taste";
 import { d66 } from "./Game.js";
 import { withBackgroundSkills } from "./Background.js";
 import { includes, hasProperties } from "./lib/taste.js";
+import { last } from "ramda";
 
 export function withEducation(
   char: Character,
@@ -16,16 +17,16 @@ export function withEducation(
 ): Character {
   return selectsUniversity
     ? rollToQualify(char) 
-      ? maybeGraduate(withEvent(withTerm(term, char)), term)
-      : char  
+      ? maybeGraduate(withEvent(withTerm(term, char)))
+      : char
     : withMilitaryAcademy(char);
 }
 
 const rollToQualify = (char: Character): boolean => roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7;
 const rollToGraduate = (char: Character): boolean => roll(DM(INT(char))) > 6;
 
-const maybeGraduate = (undergrad: Character, term: EducationTerm): Character => 
-  rollToGraduate(undergrad) ? withGraduation(term, undergrad) : undergrad;
+const maybeGraduate = (undergrad: Character): Character => 
+  rollToGraduate(undergrad) ? withGraduation(undergrad) : undergrad;
 
 
 function selectCourse(): EducationTerm {
@@ -104,18 +105,14 @@ export type EducationTerm = {
 };
 
 
-export function withGraduation({major, minor}: EducationTerm, char: Character): Character {
+export function withGraduation(char: Character): Character {
 return {
   ...char,
   skills: {
     ...char.skills,
-    [minor]: 1,
-    [major]: 2,
-  },
-  log: [
-    ...char.log,
-    `Graduated with a degree in ${major} and a minor in ${minor}`
-  ]
+    [last(char.terms).minor]: 1,
+    [last(char.terms).major]: 2,
+  }
 };
 }
 

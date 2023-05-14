@@ -1,4 +1,5 @@
 import { times } from "ramda";
+import { EducationTerm } from "./Education.js";
 import { d6 } from "./Game.js";
 import { shuffler } from "./lib/shuffler.js";
 
@@ -12,6 +13,7 @@ export interface Character {
     log: string[];
     age: number;
     birthworld: string;
+    terms: EducationTerm[]
 }
 
 export const newCharacter = (
@@ -26,6 +28,7 @@ export const newCharacter = (
   name,
   age: 0,
   birthworld,
+  terms: []
 });
 
 export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"];
