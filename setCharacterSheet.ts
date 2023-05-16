@@ -38,7 +38,7 @@ export function setCharacterSheet(char: Character) {
     });
     grid.set(2 + 4, 0, 2, 6, Box, {
         label: 'Age',
-        content: `${AGE_OF_MAJORITY + char.age*4} years`,
+        content: `${age(char)} years`,
         style: { fg: 'white', }
     });
     grid.set(2 + 4, 6, 2, 6, Box, {
@@ -71,4 +71,8 @@ export function setCharacterSheet(char: Character) {
     }
 }
 
+
+function age(char: Character) {
+    return AGE_OF_MAJORITY + char.terms.length * 4;
+}
 

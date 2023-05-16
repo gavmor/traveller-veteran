@@ -1,4 +1,4 @@
-import { is, test, expect } from '@benchristel/taste';
+import { is, test, expect, not } from '@benchristel/taste';
 import { Character } from './Character.js';
 
 export const INT = (char: Character) => parseInt(char.upp[3], 16);
@@ -23,16 +23,32 @@ export const d66 = ():d66Result => d6()+d6() as d66Result;
 
 export const Die = {
     *roll(): Generator<number, number>{
-        yield this.rolls.shift()
+        yield this.test ? this.rolls.shift() : Math.ceil(Math.random()*6)
         return 3
     },
-    rolls: []
+    rolls: [],
+    test: false
 }
 
 
 test("Dice", {
-    "roll() pulls from rolls()"(){
+    "when test is true, roll() pulls from #rolls"(){
+        Die.test = true
         Die.rolls = [42]
         expect(Die.roll().next().value, is, 42)
+    },
+    "when test is false, roll() is still defined"(){
+        Die.test=false
+        expect(Die.roll().next().value, not(is), undefined)
+        Die.test=true
+    },
+    "when test is false, roll() returns novel results"(){
+        Die.test=false
+        expect(
+            Die.roll().next().value,
+            not(is),
+            Die.roll().next().value
+        )
+        Die.test=true
     }
 })

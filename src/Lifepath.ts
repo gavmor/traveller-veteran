@@ -8,7 +8,13 @@ import { withCareer } from './Career.js';
 import { planetNameGenerator } from "planet-name-generator"
 import { planetCase } from './lib/string.js';
 import { AGE_OF_MAJORITY } from "./Setting.js";
+import { expect, is, test } from '@benchristel/taste';
 
+// test("generate", {
+//   "exits"(){
+//     expect(newUPP(), is, [])
+//   }
+// })
 export const generate = (): Character => withTerm(withBackgroundSkills(newCharacter(
     newUPP(),
     faker.name.fullName(),
