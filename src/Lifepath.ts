@@ -1,4 +1,4 @@
-import { Character, newUPP } from './Character.js';
+import { age, Character, newUPP } from './Character.js';
 import { newCharacter } from "./Character.js";
 import { withEducation } from "./Education.js";
 import { withBackgroundSkills } from './Background.js';
@@ -8,13 +8,7 @@ import { withCareer } from './Career.js';
 import { planetNameGenerator } from "planet-name-generator"
 import { planetCase } from './lib/string.js';
 import { AGE_OF_MAJORITY } from "./Setting.js";
-import { expect, is, test } from '@benchristel/taste';
 
-// test("generate", {
-//   "exits"(){
-//     expect(newUPP(), is, [])
-//   }
-// })
 export const generate = (): Character => withTerm(withBackgroundSkills(newCharacter(
     newUPP(),
     faker.name.fullName(),
@@ -30,9 +24,14 @@ function withTerm(char: Character): Character {
 }
 
 const musterOut = (char: Character) =>
-  char.age < 2
+  age(char) <= AGE_OF_MAJORITY
     ? withTerm(char)
-    : { ...char, log: [...char.log, `+++ Mustered Out at ${4*char.age+AGE_OF_MAJORITY}!`] };
+    : { 
+      ...char,
+      log: [
+        ...char.log,
+        `+++ Mustered Out at ${age(char)}!`]
+      };
 
 const ageUp = (char: Character): Character => ({
   ...char,

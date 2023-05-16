@@ -1,7 +1,7 @@
 import { times } from "ramda";
 import { EducationTerm } from "./Education.js";
 import { d6 } from "./Game.js";
-
+import { AGE_OF_MAJORITY } from "./Setting.js";
 type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
 export interface Character {
@@ -40,13 +40,6 @@ export type Skill = (typeof AllSkills)[number];
 export type Skillset = Partial<Record<Skill, number>>;
 export type Hex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
-import { test, is, expect } from '@benchristel/taste';
-
-// test("newUPP()", {
-//   "exits"(){
-//     expect(newUPP(), is, [])
-//   }
-// })
 
 export const newUPP = (): UPP => times<Hex>(newCharacteristic, 6) as UPP;
 const newCharacteristic = (): Hex => (d6() + d6()).toString(16) as Hex;
@@ -56,3 +49,7 @@ function harmlessString(): string {
     return (Math.random() + 1).toString(36).substring(7);
 }
 
+
+export function age(char: Character) {
+  return AGE_OF_MAJORITY + char.terms.length * 4;
+}

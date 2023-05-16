@@ -6,7 +6,7 @@ import {
 import { generate } from './src/Lifepath.js';
 import { setCharacterSheet } from "./setCharacterSheet.js";
 import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
-import { Character } from "./src/Character.js";
+import { age, Character } from "./src/Character.js";
 
 export const screen = blessed.screen({debug: true});
 
@@ -27,6 +27,7 @@ const universe: Character[] = [];
 const showSheet = (char) => {
     universe.push(char);
     sheet.name.setContent(char.name);
+    sheet.age.setContent(`${age(char)} years`)
     sheet.skills.setContent(classicSkillAnnotation(char.skills));
     char.log.forEach((entry:string) => sheet.log.log(entry))
     screen.debug(universe.length.toString())
