@@ -1,7 +1,7 @@
 import { default as blessed } from "blessed";
 const { box: Box } = blessed;
 import { markdown as Markdown, log as Log } from "blessed-contrib";
-import { age, Character } from "./src/Character.js";
+import { age, birthdate, Character } from "./src/Character.js";
 import { grid } from "./display.js";
 import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
 import { CURRENT_YEAR, AGE_OF_MAJORITY } from "./src/Setting.js";
@@ -26,11 +26,6 @@ export function setCharacterSheet(char: Character) {
   grid.set(2 + 2, 3, 2, 3, Box, {
     label: "Military Rank",
     content: "Unimplemented",
-    style: { fg: "white" },
-  });
-  grid.set(2 + 2, 6, 2, 6, Box, {
-    label: "Birthdate",
-    content: (CURRENT_YEAR - AGE_OF_MAJORITY - char.age * 4).toString(),
     style: { fg: "white" },
   });
   grid.set(2 + 4, 6, 2, 6, Box, {
@@ -64,5 +59,11 @@ export function setCharacterSheet(char: Character) {
       content: `${age(char)} years`,
       style: { fg: "white" },
     }),
+    birthdate: grid.set(2 + 2, 6, 2, 6, Box, {
+        label: "Birthdate",
+        content: birthdate(char),
+        style: { fg: "white" },
+      })
   };
 }
+

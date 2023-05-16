@@ -1,7 +1,8 @@
+import { expect, is, test } from "@benchristel/taste";
 import { times } from "ramda";
 import { EducationTerm } from "./Education.js";
 import { d6 } from "./Game.js";
-import { AGE_OF_MAJORITY } from "./Setting.js";
+import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./Setting.js";
 type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
 export interface Character {
@@ -50,6 +51,11 @@ function harmlessString(): string {
 }
 
 
-export function age(char: Character) {
-  return AGE_OF_MAJORITY + char.terms.length * 4;
-}
+export const age = (char: Character) => AGE_OF_MAJORITY + char.terms.length * 4;
+export const birthdate = (char: Character) => (CURRENT_YEAR - age(char)).toString()
+
+test("birthdate", {
+  "works"(){
+    expect(birthdate(newCharacter()), is, "1131")
+  }
+})

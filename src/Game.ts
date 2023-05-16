@@ -45,9 +45,9 @@ test("Dice", {
     "when test is false, roll() returns novel results"(){
         Die.test=false
         expect(
-            Die.roll().next().value,
+            [Die.roll().next().value, Die.roll().next().value],
             not(is),
-            Die.roll().next().value
+            [Die.roll().next().value, Die.roll().next().value]
         )
         Die.test=true
     }
