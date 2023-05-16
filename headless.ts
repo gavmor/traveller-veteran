@@ -1,3 +1,3 @@
 import { generate } from "./src/Lifepath.js";
 
-setInterval(() => generate(), 0)
+setInterval(() => console.log(JSON.stringify(generate(), null, 0)), 0)

@@ -1,5 +1,6 @@
 import { curry } from 'ramda'
 
+
 function protoShuffler<Member>(random: () => number, list: Member[]) {
     let idx = -1;
     const len = list.length;
@@ -14,3 +15,4 @@ function protoShuffler<Member>(random: () => number, list: Member[]) {
 };
 
 export const shuffler = curry(protoShuffler);
+export const shuffle = shuffler(Math.random);

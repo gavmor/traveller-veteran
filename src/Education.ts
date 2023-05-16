@@ -1,7 +1,8 @@
 import { d66Table, Die, INT, roll, SOC } from "./Game.js";
 import * as ramda from 'ramda';
 import { d6, DM, EDU } from './Game.js';
-import { Character, AcademicSkills, Skill, shuffle, CharBuilder } from './Character.js';
+import { Character, AcademicSkills, Skill, CharBuilder } from './Character.js';
+import { shuffle } from "./lib/shuffler.js";
 import { newCharacter } from "./Character.js";
 import { equals, expect, is, test } from "@benchristel/taste";
 import { d66 } from "./Game.js";
@@ -17,16 +18,16 @@ test("withEducation", {
   },
   "graduates doubly"(){
     Die.rolls=[6,6,6,6]
-    expect(withEducation(newCharacter([6,6,6,6,6,6]), true, {major: "foo", minor: "bar"}, c=>c).skills, equals, {
-      foo: 2,
-      bar: 1
+    expect(withEducation(newCharacter([6,6,6,6,6,6]), true, {major: "Advocate", minor: "Medic"}, c=>c).skills, equals, {
+      Advocate: 2,
+      Medic: 1
     })
   },
   "merely attends"(){
     Die.rolls=[6,6,1,1]
-    expect(withEducation(newCharacter([6,6,6,6,6,6]), true, {major: "foo", minor: "bar"}, c=>c).skills, equals, {
-      foo: 1,
-      bar: 0
+    expect(withEducation(newCharacter([6,6,6,6,6,6]), true, {major: "Art", minor: "Navigation"}, c=>c).skills, equals, {
+      Art: 1,
+      Navigation: 0
     })
   },
 })
@@ -51,8 +52,10 @@ const maybeGraduate = (undergrad: Character): Character =>
   rollToGraduate(undergrad) ? withGraduation(undergrad) : undergrad;
 
 
+type AcademicSkill = typeof AcademicSkills[number];
 function selectCourse(): EducationTerm {
-  const [major, minor]: Skill[] = ramda.take<Skill>(2, shuffle(AcademicSkills));;
+  // @ts-expect-error 
+  const [major, minor]: Skill[] = ramda.take<AcademicSkill>( 2, shuffle(AcademicSkills) );
   return {major, minor}
 }
 
@@ -111,10 +114,7 @@ export const withEducationEvent: d66Table<CharBuilder> = {
   }
 }
 
-export type EducationTerm = {
-  minor: Skill
-  major: Skill
-};
+export type EducationTerm = Record<"major"|"minor", typeof AcademicSkills[number]>
 
 
 export function withGraduation(char: Character): Character {

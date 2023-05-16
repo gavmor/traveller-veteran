@@ -23,12 +23,12 @@ export function setCharacterSheet(char: Character) {
     });
     grid.set(2 + 2, 0, 2, 3, Box, {
         label: 'Noble Title',
-        content: char.upp.join("").toUpperCase(),
+        content: "Unimplemented",
         style: { fg: 'white', }
     });
     grid.set(2 + 2, 3, 2, 3, Box, {
         label: 'Military Rank',
-        content: char.upp.join("").toUpperCase(),
+        content: "Unimplemented",
         style: { fg: 'white', }
     });
     grid.set(2 + 2, 6, 2, 6, Box, {

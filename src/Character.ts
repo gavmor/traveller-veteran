@@ -1,7 +1,6 @@
 import { times } from "ramda";
 import { EducationTerm } from "./Education.js";
 import { d6 } from "./Game.js";
-import { shuffler } from "./lib/shuffler.js";
 
 type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
@@ -39,9 +38,15 @@ export const AllSkills = [...new Set([
 ])] as const;
 export type Skill = (typeof AllSkills)[number];
 export type Skillset = Partial<Record<Skill, number>>;
-export const shuffle = shuffler(Math.random);
 export type Hex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
+import { test, is, expect } from '@benchristel/taste';
+
+// test("newUPP()", {
+//   "exits"(){
+//     expect(newUPP(), is, [])
+//   }
+// })
 
 export const newUPP = (): UPP => times<Hex>(newCharacteristic, 6) as UPP;
 const newCharacteristic = (): Hex => (d6() + d6()).toString(16) as Hex;
