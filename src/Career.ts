@@ -4,8 +4,8 @@ export function withCareer(char: Character): Character {
     return {
         ...char,
         log: [...char.log, '  Career'],
-        terms: [
-            ...char.terms,
+        career: [
+            ...char.career,
             {type: "Career"}
         ]
     };

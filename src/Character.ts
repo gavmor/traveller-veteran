@@ -5,6 +5,10 @@ import { d6 } from "./Game.js";
 import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./Setting.js";
 type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
+type Term = EducationTerm | {
+  type: "Career"
+};
+
 export interface Character {
     name: string;
     allies: string[];
@@ -13,7 +17,8 @@ export interface Character {
     log: string[];
     age: number;
     birthworld: string;
-    terms: Term[]
+    education: EducationTerm[]
+    career: Term[]
 }
 
 export const newCharacter = (
@@ -28,7 +33,8 @@ export const newCharacter = (
   name,
   age: 0,
   birthworld,
-  terms: []
+  education: [],
+  career: []
 });
 
 export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"] as const;
@@ -51,7 +57,8 @@ function harmlessString(): string {
 }
 
 
-export const age = (char: Character) => AGE_OF_MAJORITY + char.terms.length * 4;
+export const age = ({education, career}: Character) => 
+  AGE_OF_MAJORITY + (education.length+career.length) * 4;
 export const birthdate = (char: Character) => (CURRENT_YEAR - age(char)).toString()
 
 test("birthdate", {

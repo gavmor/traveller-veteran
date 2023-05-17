@@ -18,7 +18,12 @@ test("withEducation", {
   },
   "graduates doubly"(){
     Die.rolls=[6,6,6,6]
-    expect(withEducation(newCharacter([6,6,6,6,6,6]), true, {major: "Advocate", minor: "Medic"}, c=>c).skills, equals, {
+    expect(withEducation(
+      newCharacter([6,6,6,6,6,6]),
+      true,
+      {major: "Advocate", minor: "Medic"},
+      c=>c
+    ).skills, equals, {
       Advocate: 2,
       Medic: 1
     })
@@ -122,31 +127,34 @@ return {
   ...char,
   skills: {
     ...char.skills,
-    [last(char.terms).minor]: 1,
-    [last(char.terms).major]: 2,
+    [last(char.education).minor]: 1,
+    [last(char.education).major]: 2,
   }
 };
 }
 
 type Educated = Character & {
-  terms: [EducationTerm]
+  education: [EducationTerm]
 }
 
-export function withTerm({minor, major}: EducationTerm, char: Character): Educated {
-return {
-  ...char,
-  skills: {
-    ...char.skills,
-    [minor]: char.skills[minor] || 0,
-    [major]: char.skills[major] || 1, // clobbers
-  },
-  log: [
-    ...char.log,
-    `Admitted to University`,
-    `Majoring in ${major} with a minor in ${minor}`
-  ],
-  terms: [{minor, major}]
-};
+export function withTerm(
+  { minor, major }: EducationTerm,
+  char: Character
+): Educated {
+  return {
+    ...char,
+    skills: {
+      ...char.skills,
+      [minor]: char.skills[minor] || 0,
+      [major]: char.skills[major] || 1, // clobbers
+    },
+    log: [
+      ...char.log,
+      `Admitted to University`,
+      `Majoring in ${major} with a minor in ${minor}`,
+    ],
+    education: [{ minor, major }],
+  };
 }
 
 test("applyTerm", {

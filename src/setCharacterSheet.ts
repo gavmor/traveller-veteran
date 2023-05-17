@@ -4,7 +4,6 @@ import { markdown as Markdown, log as Log } from "blessed-contrib";
 import { age, birthdate, Character } from "./Character.js";
 import { grid } from "../display.js";
 import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
-import { CURRENT_YEAR, AGE_OF_MAJORITY } from "./Setting.js";
 
 export function setCharacterSheet(char: Character) {
   grid.set(0, 0, 2, 12, Markdown, {
