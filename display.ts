@@ -4,8 +4,8 @@ import {
     grid as Grid, map as Map,
     log as Log} from "blessed-contrib"; 
 import { generate } from './src/Lifepath.js';
-import { setCharacterSheet } from "./setCharacterSheet.js";
-import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
+import { setCharacterSheet } from "./src/setCharacterSheet.js";
+import { classicSkillAnnotation } from "./src/classicSkillAnnotation.js";
 import { age, birthdate, Character } from "./src/Character.js";
 
 export const screen = blessed.screen({debug: true});

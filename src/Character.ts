@@ -13,7 +13,7 @@ export interface Character {
     log: string[];
     age: number;
     birthworld: string;
-    terms: EducationTerm[]
+    terms: Term[]
 }
 
 export const newCharacter = (

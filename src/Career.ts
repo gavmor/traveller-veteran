@@ -6,7 +6,7 @@ export function withCareer(char: Character): Character {
         log: [...char.log, '  Career'],
         terms: [
             ...char.terms,
-            {foo: "bar"}
+            {type: "Career"}
         ]
     };
 }

@@ -1,4 +1,4 @@
-import { Skillset } from "./src/Character.js";
+import { Skillset } from "./Character.js";
 
 export function classicSkillAnnotation(skills: Skillset): string {
     return JSON.stringify(skills).replace(/\"/g, '')
