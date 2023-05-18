@@ -1,11 +1,11 @@
 import { expect, is, test } from '@benchristel/taste';
-import { Character, newCharacter } from './Character.js';
+import { age, Character, newCharacter } from './Character.js';
 
-// test("withCareer", {
-//     "works"(){
-//         expect(withCareer(newCharacter()), is, {})
-//     }
-// })
+test("withCareer", {
+    "increases age by a term"(){
+        expect(age(withCareer(newCharacter([2,2,2,2,2,2]))), is, 22)
+    }
+})
 export function withCareer(char: Character): Character {
     return {
         ...char,
