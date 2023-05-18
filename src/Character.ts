@@ -1,7 +1,7 @@
 import { expect, is, test } from "@benchristel/taste";
 import { times } from "ramda";
 import { EducationTerm } from "./Education.js";
-import { d6 } from "./Game.js";
+import { d6, Die } from "./Game.js";
 import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./Setting.js";
 type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
@@ -62,7 +62,9 @@ export const age = ({education, career}: Character) =>
 export const birthdate = (char: Character) => (CURRENT_YEAR - age(char)).toString()
 
 test("birthdate", {
-  "works"(){
+  "matches imperial year"(){
+    Die.test=false
     expect(birthdate(newCharacter()), is, "1131")
+    Die.test=true
   }
 })

@@ -21,17 +21,33 @@ export type d66Result = 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 export type d66Table<T> = Record<d66Result, T>;
 export const d66 = ():d66Result => d6()+d6() as d66Result;
 
+const EndOfRollsError = new Error("Predestined Rolls Exceeded!");
+
 export const Die = {
-    *roll(): Generator<number, number>{
-        yield this.test ? this.rolls.shift() : Math.ceil(Math.random()*6)
-        return 3
-    },
-    rolls: [],
-    test: false
-}
+  *roll(): Generator<number, number> {
+    if (this.test) {
+      if(this.rolls.length===0) { throw EndOfRollsError }
+      yield this.rolls.shift();
+    } else {
+      yield Math.ceil(Math.random() * 6);
+    }
+    return 3;
+  },
+  rolls: [],
+  test: false,
+};
 
 
 test("Dice", {
+    "when test is true, and rolls is empty, throws an error"(){
+        let error;
+        try {
+            Die.roll().next().value
+        } catch (e) {
+            error = e
+        }
+        expect(error.message, is, "Predestined Rolls Exceeded!")
+    },
     "when test is true, roll() pulls from #rolls"(){
         Die.test = true
         Die.rolls = [42]

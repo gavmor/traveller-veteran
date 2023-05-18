@@ -14,6 +14,7 @@ test("withEducation", {
   // this could be a type like Educated?
   "without admission changes nothing"(){
     const neophyte = newCharacter([1, 1, 1, 1, 1, 1]);
+    Die.rolls=[2, 2, 2, 2,]
     expect(withEducation(neophyte, true), equals, neophyte)
   },
   "graduates doubly"(){
@@ -67,12 +68,12 @@ function selectCourse(): EducationTerm {
 const flunk = ramda.identity;
 
 test("withEducationEvent", {
-  "Clique logs an entry"() {
-    expect(withEducationEvent[6](newCharacter()).log, includes, "Born");
-    expect(withEducationEvent[6](newCharacter()).log, includes, "Joined a Clique");
+  "Clique() logs an entry"() {
+    expect(withEducationEvent[6](newCharacter([2,2,2,2,2,2])).log, includes, "Born");
+    expect(withEducationEvent[6](newCharacter([2,2,2,2,2,2])).log, includes, "Joined a Clique");
   },
   "Clique adds d3 allies"() {
-    expect(withEducationEvent[6](newCharacter()).allies, includes, "Bjorn");
+    expect(withEducationEvent[6](newCharacter([2,2,2,2,2,2])).allies, includes, "Bjorn");
   }
 });
 
@@ -159,19 +160,21 @@ export function withTerm(
 
 test("applyTerm", {
   "adds new skills"(){
-    expect(withTerm({minor:"Admin", major: "Animals"}, newCharacter()).skills, equals, {
+    const char = newCharacter([2,2,2,2,2,2]);
+    expect(withTerm({minor:"Admin", major: "Animals"}, char).skills, equals, {
       Admin: 0,
       Animals: 1
     })
   },
   "builds on background skills"(){
-    expect(withTerm({minor:"Admin", major: "Animals"}, withBackgroundSkills(newCharacter())).skills, hasProperties, {
+    const youth = withBackgroundSkills(newCharacter([2,2,2,2,2,2]));
+    expect(withTerm({minor:"Admin", major: "Animals"}, youth).skills, hasProperties, {
       Admin: 0, // minor
       Animals: 1 // major
     })
   },
   "retains extant skills"(){
-    const youth = withBackgroundSkills(newCharacter());
+    const youth = withBackgroundSkills(newCharacter([2,2,2,2,2,2]));
     expect(withTerm({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
   }
 })
