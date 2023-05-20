@@ -17,8 +17,8 @@ export const generate = (): Character => withTerm(withBackgroundSkills(newCharac
 
 function withTerm(char: Character): Character {
     switch (d6() % 3) {
-        case 1: return withTerm(ageUp(withEducation(char)));
-        case 2: return withTerm(ageUp(withCareer(char)));
+        case 1: return withTerm(withEducation(char));
+        case 2: return withTerm(withCareer(char));
         default: return musterOut(char);
     }
 }
@@ -32,14 +32,4 @@ const musterOut = (char: Character) =>
         ...char.log,
         `+++ Mustered Out at ${age(char)}!`]
       };
-
-const ageUp = (char: Character): Character => ({
-  ...char,
-  age: char.age + 1,
-//   log: [ ...char.log, justAged(char)],
-});
-// function justAged(char: Character) {
-//     if (char.log[char.log.length-1] === ".") console.error(new Error("Aged Twice").stack, char.log, char.age)
-//     return "."
-// }
 

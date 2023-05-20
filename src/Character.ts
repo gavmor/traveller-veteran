@@ -11,14 +11,13 @@ type Term = EducationTerm | {
 
 export interface Character {
     name: string;
-    allies: string[];
     upp: UPP;
     skills: Skillset;
     log: string[];
-    age: number;
     birthworld: string;
-    education: EducationTerm[]
-    career: Term[]
+    education?: [EducationTerm] | [EducationTerm, EducationTerm]
+    allies?: string[]
+    career?: [...Term[], Term]
 }
 
 export const newCharacter = (
@@ -29,12 +28,8 @@ export const newCharacter = (
   upp,
   skills: {},
   log: ["---------",`Born`],
-  allies: [],
   name,
-  age: 0,
-  birthworld,
-  education: [],
-  career: []
+  birthworld
 });
 
 export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"] as const;
@@ -58,8 +53,9 @@ function harmlessString(): string {
 
 
 export const age = ({education, career}: Character) => 
-  AGE_OF_MAJORITY + (education.length+career.length) * 4;
-export const birthdate = (char: Character) => (CURRENT_YEAR - age(char)).toString()
+  AGE_OF_MAJORITY + ((education||[]).length+(career||[]).length) * 4;
+
+  export const birthdate = (char: Character) => (CURRENT_YEAR - age(char)).toString()
 
 test("birthdate", {
   "matches imperial year"(){

@@ -77,6 +77,8 @@ test("withEducationEvent", {
   }
 });
 
+const newAlly = () => "Bjorn";
+
 export const withEducationEvent: d66Table<CharBuilder> = {
   2: function Psionics(char) {
     return char; // TODO: Implement Education Event
@@ -90,14 +92,12 @@ export const withEducationEvent: d66Table<CharBuilder> = {
   5: function Party(char) {
     return char; // TODO: Implement Education Event
   },
-  6: function Clique(char) {
+  6: function Clique(char): Character {
     return {
       ...char,
       log: [...char.log, "Joined a Clique"],
-      allies: [
-        ...char.allies,
-        ...ramda.times(() => "Bjorn",1 + (Math.ceil(Math.random()*2)))
-      ]
+      allies: ramda.times(newAlly, 1 + (Math.ceil(Math.random()*2))),
+      
     };
   },
   7: function LifeEvent(char) {
@@ -134,8 +134,8 @@ return {
 };
 }
 
-type Educated = Character & {
-  education: [EducationTerm]
+interface Educated extends Character {
+  education: [EducationTerm] // at least one
 }
 
 export function withTerm(

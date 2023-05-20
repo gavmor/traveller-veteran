@@ -6,12 +6,13 @@ test("withCareer", {
         expect(age(withCareer(newCharacter([2,2,2,2,2,2]))), is, 22)
     }
 })
+
 export function withCareer(char: Character): Character {
     return {
         ...char,
         log: [...char.log, '  Career'],
         career: [
-            ...char.career,
+            ...char.career||[],
             {type: "Career"}
         ]
     };
