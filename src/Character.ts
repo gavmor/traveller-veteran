@@ -1,11 +1,12 @@
 import { expect, is, test } from "@benchristel/taste";
 import { times } from "ramda";
+import { Careers } from "./Career.js";
 import { EducationTerm } from "./Education.js";
 import { d6, Die } from "./Game.js";
 import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./Setting.js";
 type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
-type Term = EducationTerm | {
+export type Term = EducationTerm | {
   type: "Career"
 };
 
@@ -17,7 +18,8 @@ export interface Character {
     birthworld: string;
     education?: [EducationTerm] | [EducationTerm, EducationTerm]
     allies?: string[]
-    career?: [...Term[], Term]
+    career?: Array<typeof Careers[number]>,
+    alive: boolean
 }
 
 export const newCharacter = (
@@ -29,7 +31,8 @@ export const newCharacter = (
   skills: {},
   log: ["---------",`Born`],
   name,
-  birthworld
+  birthworld,
+  alive: true
 });
 
 export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"] as const;

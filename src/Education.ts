@@ -40,15 +40,15 @@ test("withEducation", {
 
 export function withEducation(
   char: Character,
-  selectsUniversity: boolean = Math.random() > 0.5,
-  term: EducationTerm = selectCourse(),
+  picksUniversity: boolean = Math.random() > 0.5,
+  term: EducationTerm = pickCourse(),
   withEvent: CharBuilder = withEducationEvent[d66()],
 ): Character {
-  return selectsUniversity
-    ? rollToQualify(char) 
-      ? maybeGraduate(withEvent(withTerm(term, char)))
-      : char
-    : withMilitaryAcademy(char);
+  return !picksUniversity
+    ? withMilitaryAcademy(char)
+    : !rollToQualify(char) 
+      ? char
+      : maybeGraduate(withEvent(withTerm(term, char)))
 }
 
 const rollToQualify = (char: Character): boolean => roll(DM(EDU(char)) + (SOC(char) > 8 ? 1 : 0)) >= 7;
@@ -59,7 +59,7 @@ const maybeGraduate = (undergrad: Character): Character =>
 
 
 type AcademicSkill = typeof AcademicSkills[number];
-function selectCourse(): EducationTerm {
+function pickCourse(): EducationTerm {
   // @ts-expect-error 
   const [major, minor]: Skill[] = ramda.take<AcademicSkill>( 2, shuffle(AcademicSkills) );
   return {major, minor}
