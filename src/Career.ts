@@ -1,5 +1,5 @@
-import { expect, is, not, test } from "@benchristel/taste";
-import { age, Character, newCharacter } from "./Character.js";
+import { equals, expect, is, not, test } from "@benchristel/taste";
+import { age, AllSkills, Character, newCharacter } from "./Character.js";
 import { Die, DM, EDU, roll } from "./Game.js";
 
 test("withCareer", {
@@ -26,11 +26,12 @@ export function withCareer(
   char: Character,
   term = pickCareer()
 ): Character {
+  const skill = pickSkill();
   return !rollToQualify(char, term)
     ? char
     : !rollToSurvive(char, term)
-      ? { ...char, alive: false }
-      : withTerm(char, term)
+      ? { ...char, alive: false, log: [...char.log, `Died practicing ${skill} at the age of ${age(char)}`] }
+      : withTerm(char, term, skill)
 }
 
 type Career = {
@@ -46,11 +47,37 @@ test("pickCareer", {
   },
 });
 
-function withTerm(char: Character, careerTerm: Career): Character {
+test("withTerm", {
+  "introduces skills"(){
+    expect(withTerm(newCharacter([2,2,2,2,2,2]), Careers[0], "Astrogation").skills, equals, {
+      "Astrogation": 1
+    })
+  },
+  "advances skills"(){
+    const astrogator = withTerm(newCharacter([2, 2, 2, 2, 2, 2]), Careers[0], "Astrogation");
+    expect(withTerm(astrogator, Careers[0], "Astrogation").skills, equals, {
+      "Astrogation": 2
+    })
+  }
+})
+
+function withTerm(char: Character, careerTerm: Career, skill): Character {
   return {
     ...char,
+    log: [
+      ...char.log,
+      `Advanced a career in ${skill}`
+    ],
     career: [...(char.career || []), careerTerm],
+    skills: {
+      ...char.skills,
+      [skill]: (char.skills[skill] || 0) + 1
+    }
   };
+}
+
+function pickSkill() {
+  return AllSkills[Math.floor(Math.random() * AllSkills.length)];
 }
 
 function pickCareer(): Career {

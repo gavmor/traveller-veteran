@@ -1,7 +1,7 @@
 import { expect, is, test } from "@benchristel/taste";
 import { maxBy, times } from "ramda";
 import { Careers, withCareer } from "./Career.js";
-import { EducationTerm } from "./Education.js";
+import { UniversityTerm as EducationTerm } from "./Education.js";
 import { d6, Die } from "./Game.js";
 import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./Setting.js";
 type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
@@ -16,7 +16,7 @@ export interface Character {
     skills: Skillset;
     log: string[];
     birthworld: string;
-    education?: [EducationTerm] | [EducationTerm, EducationTerm]
+    education?: EducationTerm[]
     allies?: string[]
     career?: Array<typeof Careers[number]>,
     alive: boolean

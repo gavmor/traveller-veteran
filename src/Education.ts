@@ -41,9 +41,11 @@ test("withEducation", {
 export function withEducation(
   char: Character,
   picksUniversity: boolean = Math.random() > 0.5,
-  term: EducationTerm = pickCourse(),
+  term: UniversityTerm = pickCourse(),
   withEvent: CharBuilder = withEducationEvent[d66()],
 ): Character {
+  if((char.education||[]).length > 1) return char
+  
   return !picksUniversity
     ? withMilitaryAcademy(char)
     : !rollToQualify(char) 
@@ -59,7 +61,7 @@ const maybeGraduate = (undergrad: Character): Character =>
 
 
 type AcademicSkill = typeof AcademicSkills[number];
-function pickCourse(): EducationTerm {
+function pickCourse(): UniversityTerm {
   // @ts-expect-error 
   const [major, minor]: Skill[] = ramda.take<AcademicSkill>( 2, shuffle(AcademicSkills) );
   return {major, minor}
@@ -120,7 +122,7 @@ export const withEducationEvent: d66Table<CharBuilder> = {
   }
 }
 
-export type EducationTerm = Record<"major"|"minor", typeof AcademicSkills[number]>
+export type UniversityTerm = Record<"major"|"minor", typeof AcademicSkills[number]>
 
 
 export function withGraduation(char: Character): Character {
@@ -135,11 +137,11 @@ return {
 }
 
 interface Educated extends Character {
-  education: [EducationTerm] // at least one
+  education: [UniversityTerm] // at least one
 }
 
 export function withTerm(
-  { minor, major }: EducationTerm,
+  { minor, major }: UniversityTerm,
   char: Character
 ): Educated {
   return {
@@ -183,5 +185,9 @@ export function withMilitaryAcademy(char: Character): Character {
   return {
     ...char,
     log: [ ...char.log, "Admitted to Military Academy"],
+    education: [
+      ...(char.education||[]),
+      {major: "Medic", minor: "Admin"}
+    ]
   }
 }
