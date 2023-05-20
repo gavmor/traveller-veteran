@@ -16,11 +16,13 @@ export const generate = (): Character => withTerm(withBackgroundSkills(newCharac
 )));
 
 function withTerm(char: Character): Character {
-    switch (d6() % 3) {
-        case 1: return withTerm(withEducation(char));
-        case 2: return withTerm(withCareer(char));
-        default: return musterOut(char);
-    }
+  if(!char.alive) return char;
+  
+  switch (d6() % 3) {
+      case 1: return withTerm(withEducation(char));
+      case 2: return withTerm(withCareer(char));
+      default: return musterOut(char);
+  }
 }
 
 const musterOut = (char: Character) =>

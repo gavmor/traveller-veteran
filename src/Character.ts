@@ -1,6 +1,6 @@
 import { expect, is, test } from "@benchristel/taste";
-import { times } from "ramda";
-import { Careers } from "./Career.js";
+import { maxBy, times } from "ramda";
+import { Careers, withCareer } from "./Career.js";
 import { EducationTerm } from "./Education.js";
 import { d6, Die } from "./Game.js";
 import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./Setting.js";
@@ -54,11 +54,22 @@ function harmlessString(): string {
     return (Math.random() + 1).toString(36).substring(7);
 }
 
+test("age", {
+  "works"(){
+    expect(age(newCharacter([2,2,2,2,2,2,])), is, 18)
+  },
+  "works with maxBy"(){
+    const younger = newCharacter([2, 2, 2, 2, 2, 2]);
+    Die.rolls= [6,6,6,6]
+    const older = withCareer(newCharacter([2, 2, 2, 2, 2, 2]));
+    expect(maxBy(age, younger, younger), is, younger)
+  }
+})
 
 export const age = ({education, career}: Character) => 
   AGE_OF_MAJORITY + ((education||[]).length+(career||[]).length) * 4;
 
-  export const birthdate = (char: Character) => (CURRENT_YEAR - age(char)).toString()
+export const birthdate = (char: Character) => (CURRENT_YEAR - age(char)).toString()
 
 test("birthdate", {
   "matches imperial year"(){
