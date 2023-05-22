@@ -168,8 +168,8 @@ export function withTerm(
     },
     log: [
       ...char.log,
-      `Admitted to University`,
-      `Majoring in ${major} with a minor in ${minor}`,
+      `- Admitted to University`,
+      `- Majoring in ${major} with a minor in ${minor}`,
     ],
     education: [
       ...(char.education||[]),

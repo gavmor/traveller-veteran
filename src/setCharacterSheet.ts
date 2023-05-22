@@ -4,14 +4,16 @@ import { markdown as Markdown, log as Log } from "blessed-contrib";
 import { age, birthdate, Character } from "./Character.js";
 import { grid } from "../display.js";
 import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
+import type * as BlessedContrib from "blessed-contrib";
 
 export interface CharacterSheet {
-  log: any,
-  name: any,
-  skills: any,
-  age: any,
-  birthdate: any,
-  history: any,
+  log: any;
+  name: any;
+  skills: any;
+  age: any;
+  birthdate: any;
+  history: any;
+  upp: BlessedContrib.Widgets.GridElement;
 }
 
 export function setCharacterSheet(char: Character): CharacterSheet {
@@ -21,11 +23,6 @@ export function setCharacterSheet(char: Character): CharacterSheet {
     style: { fg: "magenta", border: { fg: "black" } },
   });
 
-  grid.set(2 + 0, 7, 2, 5, Box, {
-    label: "UPP",
-    content: char.upp.join("").toUpperCase(),
-    style: { fg: "white" },
-  });
   grid.set(2 + 2, 0, 2, 3, Box, {
     label: "Noble Title",
     content: "Unimplemented",
@@ -68,16 +65,20 @@ export function setCharacterSheet(char: Character): CharacterSheet {
       style: { fg: "white" },
     }),
     birthdate: grid.set(2 + 2, 6, 2, 6, Box, {
-        label: "Birthdate",
-        content: birthdate(char),
-        style: { fg: "white" },
-      }),
+      label: "Birthdate",
+      content: birthdate(char),
+      style: { fg: "white" },
+    }),
 
-      history: grid.set(2 + 11, 0, 11, 12, Box, {
-        label: "",
-        style: { border: { fg: "black" } },
-      })
-    
+    history: grid.set(2 + 11, 0, 11, 12, Box, {
+      label: "",
+      style: { border: { fg: "black" } },
+    }),
+
+    upp: grid.set(2 + 0, 7, 2, 5, Box, {
+      label: "UPP",
+      content: char.upp.join("").toUpperCase(),
+      style: { fg: "white" },
+    })
   };
 }
-

@@ -4,23 +4,20 @@ import { classicSkillAnnotation } from "./src/classicSkillAnnotation.js";
 import { generate } from "./src/Lifepath.js";
 
 let oldest = generate();
-let gen: number = 0;
-setInterval(() => {
-  gen++;
-  const next = generate();
+const updateDisplay = (next: Character) => {
   oldest = maxBy(age)(next, oldest);
-  if (oldest === next) {
-    console.clear();
-    console.log(gen, oneLiner(oldest));
-    console.log(classicSkillAnnotation(oldest.skills));
-  }
-}, 0);
+  if (oldest === next) updateSheet(oldest);
+};
 
-function oneLiner(char: Character): string {
-  const { name, upp, birthworld } = char;
-  return `Age ${age(char)}: ${displayUPP(upp)} - ${name} (${birthworld})`;
+function updateSheet(char: Character) {
+  console.clear();
+  console.log(
+    `Age ${age(char)}: 
+    ${char.upp.join("").toUpperCase()}
+    ${char.name} (${char.birthworld})`
+  );
+  console.log(classicSkillAnnotation(char.skills));
 }
 
-function displayUPP(upp: UPP) {
-  return upp.join("").toUpperCase();
-}
+
+setInterval(() => updateDisplay(generate()), 0);

@@ -1,4 +1,4 @@
-import { age, Character, newUPP } from './Character.js';
+import { Character, newUPP } from './Character.js';
 import { newCharacter } from "./Character.js";
 import { withEducation } from "./Education.js";
 import { withBackgroundSkills } from './Background.js';
@@ -7,7 +7,7 @@ import { d6 } from './Game.js';
 import { withCareer } from './Career.js';
 import { planetNameGenerator } from "planet-name-generator"
 import { planetCase } from './lib/string.js';
-import { AGE_OF_MAJORITY } from "./Setting.js";
+import { musterOut } from './musterOut.js';
 
 export const generate = (): Character => withTerm(withBackgroundSkills(newCharacter(
     newUPP(),
@@ -15,7 +15,7 @@ export const generate = (): Character => withTerm(withBackgroundSkills(newCharac
     planetCase(planetNameGenerator(1)[0])
 )));
 
-function withTerm(char: Character): Character {
+export function withTerm(char: Character): Character {
   if(!char.alive) return char;
   
   switch (d6() % 3) {
@@ -24,14 +24,4 @@ function withTerm(char: Character): Character {
       default: return musterOut(char);
   }
 }
-
-const musterOut = (char: Character) =>
-  age(char) <= AGE_OF_MAJORITY
-    ? withTerm(char)
-    : { 
-      ...char,
-      log: [
-        ...char.log,
-        `+++ Mustered Out at ${age(char)}!`]
-      };
 

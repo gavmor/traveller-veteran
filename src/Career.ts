@@ -30,7 +30,7 @@ export function withCareer(
   return !rollToQualify(char, term)
     ? char
     : !rollToSurvive(char, term)
-      ? { ...char, alive: false, log: [...char.log, `Died practicing ${skill} at the age of ${age(char)}`] }
+      ? withDeath(char, skill)
       : withTerm(char, term, skill)
 }
 
@@ -61,12 +61,16 @@ test("withTerm", {
   }
 })
 
+function withDeath(char: Character, skill: Skill): Character {
+  return { ...char, alive: false, log: [...char.log, `Died practicing ${skill} at the age of ${age(char)}`] };
+}
+
 export function withTerm(char: Character, careerTerm: Career, skill: Skill): Character {
   return {
     ...char,
     log: [
       ...char.log,
-      `Advanced a career in ${skill}`
+      `- - Career in ${skill}`
     ],
     career: [...(char.career || []), careerTerm],
     skills: {
