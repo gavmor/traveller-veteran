@@ -1,6 +1,7 @@
 import { equals, expect, is, not, test } from "@benchristel/taste";
-import { age, AllSkills, Character, newCharacter, Skill } from "./Character.js";
-import { Die, DM, EDU, roll } from "./Game.js";
+import { age, Character, newCharacter } from "./Character.js";
+import { AllSkills, Skill } from "./game/Skills.js";
+import { Die, DM, EDU, roll } from "./game/Mechanics.js";
 
 test("withCareer", {
   "when qualified, and surviving, increases age by a term"() {

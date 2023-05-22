@@ -1,5 +1,5 @@
 import {getAllTests, runTests, formatTestResultsAsText} from "@benchristel/taste"
-import { Die } from "./src/Game.js"
+import { Die } from "./src/game/Mechanics.js"
 import "./src/Lifepath.js"
 
 Die.test=true

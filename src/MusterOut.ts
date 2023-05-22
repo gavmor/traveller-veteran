@@ -1,7 +1,6 @@
 import { age, Character } from "./Character.js";
 import { newCharacter } from "./Character.js";
-import { Die } from "./Game.js";
-import { AGE_OF_MAJORITY } from "./Setting.js";
+import { Die } from "./game/Mechanics.js";
 import { expect, is, not, test } from "@benchristel/taste";
 import { withTerm } from "./Lifepath.js";
 
@@ -10,7 +9,7 @@ export const musterOut = (char: Character) =>
     ? withTerm(char)
     : {
         ...char,
-        log: [...char.log, `+ + + Mustered Out at ${age(char)}!`],
+        log: [...char.log, `Mustered Out at ${age(char)}!`],
       };
 
 test("musterOut", {

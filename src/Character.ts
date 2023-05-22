@@ -2,13 +2,11 @@ import { expect, is, test } from "@benchristel/taste";
 import { maxBy, times } from "ramda";
 import { Careers, withCareer } from "./Career.js";
 import { UniversityTerm as EducationTerm } from "./Education.js";
-import { d6, Die } from "./Game.js";
-import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./Setting.js";
-export type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
+import { d6, Die } from "./game/Mechanics.js";
+import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./game/Setting.js";
+import { Skillset } from "./game/Skills.js";
 
-export type Term = EducationTerm | {
-  type: "Career"
-};
+export type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
 export interface Character {
     name: string;
@@ -35,14 +33,6 @@ export const newCharacter = (
   alive: true
 });
 
-export const AcademicSkills = ["Admin", "Advocate", "Animals", "Animals (Training)", "Animals (Veterinary)", "Art", "Astrogation", "Electronics (any)", "Engineer (any)", "Language (any)", "Medic", "Navigation", "Profession (any)", "Science (any)"] as const;
-export const BackgroundSkills = ["Admin", "Animals", "Art", "Athletics", "Carouse", "Drive", "Electronics", "Science", "Flyer", "Seafarer", "Language", "Streetwise", "Mechanic", "Survival", "Medic", "Vacc Suit", "Profession"] as const;
-export const AllSkills = [...new Set([
-    ...BackgroundSkills,
-    ...AcademicSkills
-])] as const;
-export type Skill = (typeof AllSkills)[number];
-export type Skillset = Partial<Record<Skill, number>>;
 export type Hex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
 

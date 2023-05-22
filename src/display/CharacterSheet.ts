@@ -1,8 +1,8 @@
 import { default as blessed } from "blessed";
 const { box: Box } = blessed;
 import { markdown as Markdown, log as Log } from "blessed-contrib";
-import { age, birthdate, Character } from "./Character.js";
-import { grid } from "../display.js";
+import { age, birthdate, Character } from "../Character.js";
+import { grid as extantGrid } from "../../display.js";
 import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
 import type * as BlessedContrib from "blessed-contrib";
 
@@ -16,7 +16,7 @@ export interface CharacterSheet {
   upp: BlessedContrib.Widgets.GridElement;
 }
 
-export function setCharacterSheet(char: Character): CharacterSheet {
+export function newCharacterSheet(grid: BlessedContrib.Widgets.GridElement, char: Character): CharacterSheet {
   grid.set(0, 0, 2, 12, Markdown, {
     label: "",
     content: "PERSONAL DATA",

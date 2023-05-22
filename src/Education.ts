@@ -1,11 +1,12 @@
-import { d66Table, Die, INT, roll, SOC } from "./Game.js";
+import { d66Table, Die, INT, roll, SOC } from "./game/Mechanics.js";
 import * as ramda from 'ramda';
-import { d6, DM, EDU } from './Game.js';
-import { Character, AcademicSkills, Skill, CharBuilder } from './Character.js';
+import { d6, DM, EDU } from './game/Mechanics.js';
+import { Character, CharBuilder } from './Character.js';
+import { AcademicSkills, Skill } from "./game/Skills.js";
 import { shuffle } from "./lib/shuffler.js";
 import { newCharacter } from "./Character.js";
 import { equals, expect, is, not, test } from "@benchristel/taste";
-import { d66 } from "./Game.js";
+import { d66 } from "./game/Mechanics.js";
 import { withBackgroundSkills } from "./Background.js";
 import { includes, hasProperties } from "./lib/taste.js";
 import { last } from "ramda";
@@ -82,8 +83,6 @@ function pickCourse(): UniversityTerm {
   const [major, minor]: Skill[] = ramda.take<AcademicSkill>( 2, shuffle(AcademicSkills) );
   return {major, minor}
 }
-
-const flunk = ramda.identity;
 
 test("withEducationEvent", {
   "Clique() logs an entry"() {

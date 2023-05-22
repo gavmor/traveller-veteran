@@ -1,6 +1,6 @@
 import { maxBy } from "ramda";
 import { age, Character, UPP } from "./src/Character.js";
-import { classicSkillAnnotation } from "./src/classicSkillAnnotation.js";
+import { classicSkillAnnotation } from "./src/display/classicSkillAnnotation.js";
 import { generate } from "./src/Lifepath.js";
 
 let oldest = generate();

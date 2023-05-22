@@ -1,6 +1,7 @@
 import * as ramda from 'ramda';
-import { DM, EDU } from './Game.js';
-import { Character, Skillset, Skill, BackgroundSkills } from './Character.js';
+import { DM, EDU } from './game/Mechanics.js';
+import { Character } from './Character.js';
+import { Skillset, Skill, BackgroundSkills } from "./game/Skills.js";
 import { shuffle } from "./lib/shuffler.js";
 import { newCharacter } from "./Character.js";
 import { equals, expect, test } from "@benchristel/taste";

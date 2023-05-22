@@ -1,11 +1,9 @@
 
 import {default as blessed} from "blessed";
-import {
-    grid as Grid, map as Map,
-    log as Log} from "blessed-contrib"; 
+import { grid as Grid } from "blessed-contrib"; 
 import { generate } from './src/Lifepath.js';
-import { CharacterSheet, setCharacterSheet as initializeSheet } from "./src/setCharacterSheet.js";
-import { classicSkillAnnotation } from "./src/classicSkillAnnotation.js";
+import { CharacterSheet, newCharacterSheet as initializeSheet } from "./src/display/CharacterSheet.js";
+import { classicSkillAnnotation } from "./src/display/classicSkillAnnotation.js";
 import { age, birthdate, Character } from "./src/Character.js";
 import { maxBy } from "ramda";
 
@@ -37,7 +35,7 @@ function updateSheet(sheet: CharacterSheet, char: Character) {
   sheet.history.setContent(JSON.stringify(char.log, null, 2))
 }
 
-const sheet = initializeSheet(oldest);
+const sheet = initializeSheet(grid, oldest);
 setInterval(() => updateDisplay(sheet, generate()), 500);
 
 

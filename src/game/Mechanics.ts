@@ -1,5 +1,5 @@
 import { is, test, expect, not } from '@benchristel/taste';
-import { Character } from './Character.js';
+import { Character } from '../Character.js';
 
 export const INT = (char: Character) => parseInt(char.upp[3], 16);
 export const EDU = (char: Character) => parseInt(char.upp[4], 16);
@@ -36,7 +36,6 @@ export const Die = {
   rolls: [],
   test: false,
 };
-
 
 test("Dice", {
     "when test is true, and rolls is empty, throws an error"(){
