@@ -24,7 +24,7 @@ const updateDisplay = (sheet: CharacterSheet, next: Character) => {
   universe.push(next)
   oldest = maxBy(age)(next, oldest)
   if(next===oldest) updateSheet(sheet, oldest);
-  sheet.log.log("------")
+  sheet.log.log(`--- ${next.name} ---`)
   next.log.forEach((entry: string) => sheet.log.log(entry));
 }
 

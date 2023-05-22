@@ -7,7 +7,7 @@ import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
 import type * as BlessedContrib from "blessed-contrib";
 
 export interface CharacterSheet {
-  log: any;
+  log: BlessedContrib.Widgets.LogElement;
   name: any;
   skills: any;
   age: any;
@@ -53,6 +53,7 @@ export function setCharacterSheet(char: Character): CharacterSheet {
     }),
     log: grid.set(2, 12, 22, 12, Log, {
       label: "Lifepath",
+      bufferLines: 0
     }),
     skills: grid.set(2 + 6, 0, 3, 12, Box, {
       label: "Skills",

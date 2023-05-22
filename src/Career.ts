@@ -62,7 +62,14 @@ test("withTerm", {
 })
 
 function withDeath(char: Character, skill: Skill): Character {
-  return { ...char, alive: false, log: [...char.log, `Died practicing ${skill} at the age of ${age(char)}`] };
+  return { 
+    ...char,
+    alive: false,
+    log: [
+      ...char.log,
+      `Died practicing ${skill} at the age of ${age(char)}`
+    ]
+  };
 }
 
 export function withTerm(char: Character, careerTerm: Career, skill: Skill): Character {
@@ -70,7 +77,7 @@ export function withTerm(char: Character, careerTerm: Career, skill: Skill): Cha
     ...char,
     log: [
       ...char.log,
-      `- - Career in ${skill}`
+      `Career in ${skill}`
     ],
     career: [...(char.career || []), careerTerm],
     skills: {

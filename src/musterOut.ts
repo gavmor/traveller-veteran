@@ -6,11 +6,11 @@ import { expect, is, not, test } from "@benchristel/taste";
 import { withTerm } from "./Lifepath.js";
 
 export const musterOut = (char: Character) =>
-  age(char) <= AGE_OF_MAJORITY + 8
+  age(char) <= Infinity
     ? withTerm(char)
     : {
         ...char,
-        log: [...char.log, `+++ Mustered Out at ${age(char)}!`],
+        log: [...char.log, `+ + + Mustered Out at ${age(char)}!`],
       };
 
 test("musterOut", {
