@@ -4,7 +4,7 @@ import { Careers, withCareer } from "./Career.js";
 import { UniversityTerm as EducationTerm } from "./Education.js";
 import { d6, Die } from "./Game.js";
 import { AGE_OF_MAJORITY, CURRENT_YEAR } from "./Setting.js";
-type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
+export type UPP = [Hex, Hex, Hex, Hex, Hex, Hex];
 
 export type Term = EducationTerm | {
   type: "Career"
