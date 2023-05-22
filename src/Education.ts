@@ -197,7 +197,7 @@ test("withTerm", {
   },
   "appends to education"(){
     const char = newCharacter([2,2,2,2,2,2])
-    const term: UniversityTerm = { major: "Animals (Training)", minor: "Art" };
+    const term: UniversityTerm = { major: "Admin", minor: "Art" };
     expect(withTerm(term, char).education.length, is, 1)
     expect(withTerm(term, withTerm(term, char)).education.length, is, 2)
   }
