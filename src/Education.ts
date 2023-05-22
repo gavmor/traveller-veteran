@@ -4,19 +4,28 @@ import { d6, DM, EDU } from './Game.js';
 import { Character, AcademicSkills, Skill, CharBuilder } from './Character.js';
 import { shuffle } from "./lib/shuffler.js";
 import { newCharacter } from "./Character.js";
-import { equals, expect, is, test } from "@benchristel/taste";
+import { equals, expect, is, not, test } from "@benchristel/taste";
 import { d66 } from "./Game.js";
 import { withBackgroundSkills } from "./Background.js";
 import { includes, hasProperties } from "./lib/taste.js";
 import { last } from "ramda";
-import { withCareer } from "./Career.js";
+import { Career, withTerm as withCareerTerm } from "./Career.js";
 
 test("withEducation", {
-  // "permits only as the first two terms"(){
-  //   const priorTerm: UniversityTerm = { major: "Medic", minor: "Advocate"};
-  //   const graduate = withTerm(priorTerm, withTerm(priorTerm, newCharacter([1, 1, 1, 1, 1, 1])))
-  //   expect(withEducation(graduate), is, graduate)
-  // },
+  "permits only two terms"(){
+    const priorTerm: UniversityTerm = { major: "Medic", minor: "Advocate"};
+    const graduate = withTerm(priorTerm, withTerm(priorTerm, newCharacter([1, 1, 1, 1, 1, 1])))
+    expect(graduate.education.length, is, 2)
+    Die.rolls=[6,6]
+    expect(withEducation(graduate, true), is, graduate)
+  },
+  "permits no adult education"(){
+    const priorTerm: Career = { stat: c => 1, threshold: 2 };
+    const graduate = withCareerTerm(withCareerTerm(newCharacter(["C", "C", "C", "C", "C", "C"]), priorTerm, "Streetwise"), priorTerm, "Seafarer")
+    expect(graduate.career.length, is, 2)
+    Die.rolls=[6,6,6,6,6,6,6,6,6]
+    expect(withEducation(graduate, true).education, is, undefined)
+  },
   "without admission changes nothing"(){
     const neophyte = newCharacter([1, 1, 1, 1, 1, 1]);
     Die.rolls=[2, 2, 2, 2,]
@@ -50,6 +59,9 @@ export function withEducation(
   withEvent: CharBuilder = withEducationEvent[d66()],
 ): Character {
   if((char.education||[]).length > 1) return char
+  if(!!char.career) return char
+
+
   return !picksUniversity
     ? withMilitaryAcademy(char)
     : !rollToQualify(char) 
@@ -146,7 +158,7 @@ interface Educated extends Character {
 export function withTerm(
   { minor, major }: UniversityTerm,
   char: Character
-): Educated {
+): Character {
   return {
     ...char,
     skills: {
@@ -159,11 +171,14 @@ export function withTerm(
       `Admitted to University`,
       `Majoring in ${major} with a minor in ${minor}`,
     ],
-    education: [{ minor, major }],
+    education: [
+      ...(char.education||[]),
+      { minor, major }
+    ],
   };
 }
 
-test("applyTerm", {
+test("withTerm", {
   "adds new skills"(){
     const char = newCharacter([2,2,2,2,2,2]);
     expect(withTerm({minor:"Admin", major: "Animals"}, char).skills, equals, {
@@ -181,6 +196,12 @@ test("applyTerm", {
   "retains extant skills"(){
     const youth = withBackgroundSkills(newCharacter([2,2,2,2,2,2]));
     expect(withTerm({major:"Admin", minor: "Animals"}, youth).skills, hasProperties, youth.skills)
+  },
+  "appends to education"(){
+    const char = newCharacter([2,2,2,2,2,2])
+    const term: UniversityTerm = { major: "Animals (Training)", minor: "Art" };
+    expect(withTerm(term, char).education.length, is, 1)
+    expect(withTerm(term, withTerm(term, char)).education.length, is, 2)
   }
 })
 

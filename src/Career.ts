@@ -1,5 +1,5 @@
 import { equals, expect, is, not, test } from "@benchristel/taste";
-import { age, AllSkills, Character, newCharacter } from "./Character.js";
+import { age, AllSkills, Character, newCharacter, Skill } from "./Character.js";
 import { Die, DM, EDU, roll } from "./Game.js";
 
 test("withCareer", {
@@ -34,7 +34,7 @@ export function withCareer(
       : withTerm(char, term, skill)
 }
 
-type Career = {
+export type Career = {
   stat: typeof EDU;
   threshold: number;
 };
@@ -61,7 +61,7 @@ test("withTerm", {
   }
 })
 
-function withTerm(char: Character, careerTerm: Career, skill): Character {
+export function withTerm(char: Character, careerTerm: Career, skill: Skill): Character {
   return {
     ...char,
     log: [
