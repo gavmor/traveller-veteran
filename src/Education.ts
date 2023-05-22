@@ -9,9 +9,14 @@ import { d66 } from "./Game.js";
 import { withBackgroundSkills } from "./Background.js";
 import { includes, hasProperties } from "./lib/taste.js";
 import { last } from "ramda";
+import { withCareer } from "./Career.js";
 
 test("withEducation", {
-  // this could be a type like Educated?
+  // "permits only as the first two terms"(){
+  //   const priorTerm: UniversityTerm = { major: "Medic", minor: "Advocate"};
+  //   const graduate = withTerm(priorTerm, withTerm(priorTerm, newCharacter([1, 1, 1, 1, 1, 1])))
+  //   expect(withEducation(graduate), is, graduate)
+  // },
   "without admission changes nothing"(){
     const neophyte = newCharacter([1, 1, 1, 1, 1, 1]);
     Die.rolls=[2, 2, 2, 2,]
@@ -45,7 +50,6 @@ export function withEducation(
   withEvent: CharBuilder = withEducationEvent[d66()],
 ): Character {
   if((char.education||[]).length > 1) return char
-  
   return !picksUniversity
     ? withMilitaryAcademy(char)
     : !rollToQualify(char) 
@@ -71,7 +75,6 @@ const flunk = ramda.identity;
 
 test("withEducationEvent", {
   "Clique() logs an entry"() {
-    expect(withEducationEvent[6](newCharacter([2,2,2,2,2,2])).log, includes, "Born");
     expect(withEducationEvent[6](newCharacter([2,2,2,2,2,2])).log, includes, "Joined a Clique");
   },
   "Clique adds d3 allies"() {

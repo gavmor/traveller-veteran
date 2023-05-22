@@ -29,7 +29,7 @@ export const newCharacter = (
 ): Character => ({
   upp,
   skills: {},
-  log: ["---------",`Born`],
+  log: [],
   name,
   birthworld,
   alive: true

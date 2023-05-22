@@ -5,7 +5,16 @@ import { age, birthdate, Character } from "./Character.js";
 import { grid } from "../display.js";
 import { classicSkillAnnotation } from "./classicSkillAnnotation.js";
 
-export function setCharacterSheet(char: Character) {
+export interface CharacterSheet {
+  log: any,
+  name: any,
+  skills: any,
+  age: any,
+  birthdate: any,
+  history: any,
+}
+
+export function setCharacterSheet(char: Character): CharacterSheet {
   grid.set(0, 0, 2, 12, Markdown, {
     label: "",
     content: "PERSONAL DATA",
@@ -62,7 +71,13 @@ export function setCharacterSheet(char: Character) {
         label: "Birthdate",
         content: birthdate(char),
         style: { fg: "white" },
+      }),
+
+      history: grid.set(2 + 11, 0, 11, 12, Box, {
+        label: "",
+        style: { border: { fg: "black" } },
       })
+    
   };
 }
 
